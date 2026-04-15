@@ -1,6 +1,6 @@
 {
   "experiment": "exp15_s42",
-  "timestamp": "2026-04-16T03:59:56.603539",
+  "timestamp": "2026-04-16T04:58:59.670197",
   "mlflow_enabled": true,
   "mlflow_experiment": "pill_detection_v2_train",
   "mlflow_tracking_uri": "file:/home/imella0707/personal/pill_detection_v2/mlruns",
@@ -36,11 +36,11 @@
   "model_params_total": 9449464,
   "model_params_trainable": 9449448,
   "best_epoch": 1,
-  "train_results_csv": "runs/exp15_s42/results.csv",
+  "train_results_csv": "runs/exp15_s422/results.csv",
   "train_completed_epochs": 1,
-  "train_time_seconds": 10.5811,
-  "train_time_minutes": 0.17635166666666666,
-  "avg_epoch_time_seconds": 10.5811,
+  "train_time_seconds": 11.3768,
+  "train_time_minutes": 0.18961333333333333,
+  "avg_epoch_time_seconds": 11.3768,
   "Precision": 0.49738903878099916,
   "Recall": 0.12845245625131774,
   "F1-Score": 0.20417579930714602,
@@ -105,7 +105,7 @@
     "\ud2b8\uc708\uc2a4\ud0c0\uc815 40/5mg": 0.022766113098279684,
     "\ud50c\ub77c\ube45\uc2a4\uc815 75mg": 0.08927954777507566
   },
-  "mlflow_run_id": "e011f6097f344069b1b50bdedb1150aa",
-  "resolved_config_path": "runs/exp15_s42/resolved_config.yaml",
-  "infer_config_path": "configs/inference/exp15_inference_s42.yaml"
+  "mlflow_run_id": "ae8d3aaf650d421d8b0d55d944f7c4c2",
+  "resolved_config_path": "runs/exp15_s422/resolved_config.yaml",
+  "infer_config_path": "configs/inference/exp15_inference_s422.yaml"
 }

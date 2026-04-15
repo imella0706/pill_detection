@@ -805,7 +805,7 @@ def main() -> None:
 
     # 👉 학습
     try:
-        model.train(
+        results = model.train(
             data=str(data_yaml),
             epochs=args.epochs,
             imgsz=args.imgsz,
@@ -1070,6 +1070,10 @@ def main() -> None:
         safe_log_artifact(mlflow_module, resolved_train_artifact, artifact_path="config")
         safe_log_artifact(mlflow_module, metrics_artifact, artifact_path="metrics")
         safe_log_artifact(mlflow_module, resolved_inference_artifact, artifact_path="config")
+        
+        # YOLO 시각화 결과물(results.png, confusion_matrix 등) 전수 업로드
+        if results is not None and hasattr(results, 'save_dir') and os.path.exists(results.save_dir):
+            mlflow_module.log_artifacts(results.save_dir, artifact_path="plots")
         mlflow_module.set_tag("best_ckpt_path", to_project_relative(best_ckpt_path))
         mlflow_module.set_tag("resolved_config_path", to_project_relative(resolved_config_path))
         mlflow_module.set_tag("metrics_path", to_project_relative(metrics_path))
