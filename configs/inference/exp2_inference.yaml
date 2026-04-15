@@ -1,10 +1,18 @@
+paths:
+  data_root: data
+  image_root: ${paths.data_root}/raw
+  annotation_root: ${paths.data_root}/curated
+  processed_root: ${paths.data_root}/processed
+  datasets_root: ${paths.data_root}/datasets
+  train_images_dir: ${paths.image_root}/train_images
+  test_images_dir: ${paths.image_root}/test_images
+  annotation_source_dir: ${paths.annotation_root}/train_annotations
+
 conf: 0.25
 data: data/datasets/yolo/copy_paste/cp_t20_data_seed42/dataset.yaml
 imgsz: 1024
 iou: 0.7
-json_dir: /home/imella0707/PillaTech_team04/data/raw/sprint_ai_project1_data/train_annotations
 model: runs/exp22H3M0_train_yolo11s_res960_hsvh020_mosaic00/weights/best.pt
 output: submission/exp26_s42_img1024.csv
 save_config: true
 save_log: false
-test_images: /home/imella0707/PillaTech_team04/data/raw/sprint_ai_project1_data/test_images

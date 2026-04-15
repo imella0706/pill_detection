@@ -1,8 +1,16 @@
+paths:
+  data_root: data
+  image_root: ${paths.data_root}/raw
+  annotation_root: ${paths.data_root}/curated
+  processed_root: ${paths.data_root}/processed
+  datasets_root: ${paths.data_root}/datasets
+  train_images_dir: ${paths.image_root}/train_images
+  test_images_dir: ${paths.image_root}/test_images
+  annotation_source_dir: ${paths.annotation_root}/train_annotations
+
 conf: 0.2
 data: data/datasets/yolo/copy_paste/cp_t20_data_seed42/dataset.yaml
 imgsz: 960
 iou: 0.6
-json_dir: data/raw/sprint_ai_project1_data/train_annotations
 model: runs/pill_exp5_yolo11s_copypaste/weights/best.pt
 output: submission/exp9_submission_960.csv
-test_images: data/raw/sprint_ai_project1_data/test_images

@@ -13,9 +13,9 @@ echo "[1/3] Installing verified dependencies from requirements.txt..."
 pip install -r requirements.txt
 
 # 2. 원본 데이터 유무 확인 (MLOps 방어 로직)
-if [ ! -d "data/raw/sprint_ai_project1_data" ]; then
+if [ ! -d "data/raw" ]; then
     echo "  Error: 원본 데이터셋을 찾을 수 없습니다."
-    echo " data/raw/sprint_ai_project1_data/ 폴더에 이미지를 배치한 후 다시 실행하세요."
+    echo " data/raw/ 폴더에 이미지를 배치한 후 다시 실행하세요."
     exit 1
 fi
 

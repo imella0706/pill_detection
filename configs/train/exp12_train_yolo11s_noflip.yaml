@@ -1,3 +1,13 @@
+paths:
+  data_root: data
+  image_root: ${paths.data_root}/raw
+  annotation_root: ${paths.data_root}/curated
+  processed_root: ${paths.data_root}/processed
+  datasets_root: ${paths.data_root}/datasets
+  train_images_dir: ${paths.image_root}/train_images
+  test_images_dir: ${paths.image_root}/test_images
+  annotation_source_dir: ${paths.annotation_root}/train_annotations
+
 # Exp 12 Cleaned Baseline Configuration (True A/B Test)
 # 원본 Exp 5의 설정(No-Flip: fliplr 0.0)을 완벽하게 재현하면서
 # 정제된 데이터셋(Exp 11)과의 순수 시너지를 측정하기 위한 설정.

@@ -22,6 +22,7 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.append(str(PROJECT_ROOT))
 
 from src.utils.logging_utils import start_run_logging
+from src.utils.project_paths import TEST_IMAGES_DIR
 
 def get_image_sizes(image_dir):
     sizes = {}
@@ -44,7 +45,7 @@ def resolve_image_dir(csv_paths, image_dir):
     # Auto-detect based on csv filename hints.
     if 'val' in csv_paths[0]:
         return 'data/datasets/yolo/copy_paste/cp_t20_data_seed42/images/val'
-    return 'data/raw/sprint_ai_project1_data/test_images'
+    return str(TEST_IMAGES_DIR)
 
 def parse_args():
     parser = argparse.ArgumentParser(

@@ -1,9 +1,17 @@
+paths:
+  data_root: data
+  image_root: ${paths.data_root}/raw
+  annotation_root: ${paths.data_root}/curated
+  processed_root: ${paths.data_root}/processed
+  datasets_root: ${paths.data_root}/datasets
+  train_images_dir: ${paths.image_root}/train_images
+  test_images_dir: ${paths.image_root}/test_images
+  annotation_source_dir: ${paths.annotation_root}/train_annotations
+
 model: runs/exp23C3_train_yolo11s_res960_hsvh020_mosaic00_clahe25/weights/best.pt
 imgsz: 960
 conf: 0.25
 iou: 0.7
 output: submission/exp23C3_yolo11s_res960_hsvh020_mosaic00_clahe25.csv
-test_images: data/raw/sprint_ai_project1_data/test_images
 data: data/datasets/yolo/clahe/cl25_data_seed42/dataset.yaml
-json_dir: data/raw/sprint_ai_project1_data/train_annotations
 save_config: true

@@ -27,11 +27,12 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.append(str(PROJECT_ROOT))
 
 from src.utils.logging_utils import start_run_logging
+from src.utils.project_paths import CURATED_TRAIN_ANNOTATIONS_DIR
 
 DEFAULT_VAL_IMG_DIR = PROJECT_ROOT / "data" / "yolo_dataset" / "images" / "val"
 DEFAULT_VAL_LABEL_DIR = PROJECT_ROOT / "data" / "yolo_dataset" / "labels" / "val"
 DEFAULT_YAML_PATH = PROJECT_ROOT / "data" / "yolo_dataset" / "dataset.yaml"
-DEFAULT_JSON_DIR = PROJECT_ROOT / "data" / "raw" / "sprint_ai_project1_data" / "train_annotations"
+DEFAULT_JSON_DIR = CURATED_TRAIN_ANNOTATIONS_DIR
 DEFAULT_METRICS_DIR = PROJECT_ROOT / "metrics"
 
 

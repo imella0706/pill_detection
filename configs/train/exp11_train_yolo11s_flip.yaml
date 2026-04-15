@@ -1,3 +1,13 @@
+paths:
+  data_root: data
+  image_root: ${paths.data_root}/raw
+  annotation_root: ${paths.data_root}/curated
+  processed_root: ${paths.data_root}/processed
+  datasets_root: ${paths.data_root}/datasets
+  train_images_dir: ${paths.image_root}/train_images
+  test_images_dir: ${paths.image_root}/test_images
+  annotation_source_dir: ${paths.annotation_root}/train_annotations
+
 # Exp 11 Cleaned Baseline Configuration
 # 원본 Exp 5의 설정(yolo11s, 960px, batch 16 등)을 유지하면서
 # 데이터 정제의 순수 ROI(Return on Investment)만을 측정하기 위한 설정.

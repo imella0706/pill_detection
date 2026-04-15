@@ -1,3 +1,13 @@
+paths:
+  data_root: data
+  image_root: ${paths.data_root}/raw
+  annotation_root: ${paths.data_root}/curated
+  processed_root: ${paths.data_root}/processed
+  datasets_root: ${paths.data_root}/datasets
+  train_images_dir: ${paths.image_root}/train_images
+  test_images_dir: ${paths.image_root}/test_images
+  annotation_source_dir: ${paths.annotation_root}/train_annotations
+
 # Exp 5 Baseline: YOLO11s + Stratified Split + Custom Copy-Paste + No-Flip
 # 이 파일은 Exp 5의 유전자를 보존하며, 팀원들이 실험을 상속받아 고도화할 때 베이스라인으로 사용함.
 

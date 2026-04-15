@@ -1,3 +1,13 @@
+paths:
+  data_root: data
+  image_root: ${paths.data_root}/raw
+  annotation_root: ${paths.data_root}/curated
+  processed_root: ${paths.data_root}/processed
+  datasets_root: ${paths.data_root}/datasets
+  train_images_dir: ${paths.image_root}/train_images
+  test_images_dir: ${paths.image_root}/test_images
+  annotation_source_dir: ${paths.annotation_root}/train_annotations
+
 name: "exp24V2_train_yolo11s_res960_hsvh020_mosaic00_hsvv020"
 model: "yolo11s.pt"
 data: "data/datasets/yolo/copy_paste/cp_t20_data_seed42/dataset.yaml"

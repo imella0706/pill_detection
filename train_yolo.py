@@ -20,16 +20,17 @@ import torch
 import yaml
 from ultralytics import YOLO
 
+from src.utils.config_paths import apply_train_config_paths, default_paths_config
 from src.utils.logging_utils import start_run_logging
 from src.utils.metrics_utils import collect_runtime_env
+from src.utils.project_paths import CURATED_TRAIN_ANNOTATIONS_DIR, PROJECT_ROOT, TEST_IMAGES_DIR
 
 
-PROJECT_ROOT = Path(__file__).resolve().parent
 DEFAULT_DATA_YAML_PRIMARY = PROJECT_ROOT / "data" / "yolo_dataset" / "dataset.yaml"
 METRICS_DIR = PROJECT_ROOT / "metrics"
 DEFAULT_INFER_CONFIG_DIR = PROJECT_ROOT / "configs" / "inference"
-DEFAULT_TEST_IMAGES_DIR = PROJECT_ROOT / "data" / "raw" / "sprint_ai_project1_data" / "test_images"
-DEFAULT_JSON_DIR = PROJECT_ROOT / "data" / "raw" / "sprint_ai_project1_data" / "train_annotations"
+DEFAULT_TEST_IMAGES_DIR = TEST_IMAGES_DIR
+DEFAULT_JSON_DIR = CURATED_TRAIN_ANNOTATIONS_DIR
 
 # 👉 runs 경로를 절대경로로 고정 (핵심)
 RUNS_DIR = PROJECT_ROOT / "runs"
@@ -79,7 +80,7 @@ def load_config(config_path: Path) -> dict:
     if not isinstance(data, dict):
         raise TypeError(f"Config must be a mapping/dict, got: {type(data).__name__}")
 
-    return data
+    return apply_train_config_paths(data)
 
 
 def parse_bool(value: object) -> bool:
@@ -379,6 +380,7 @@ def parse_args() -> argparse.Namespace:
             "mixup",
             "seed",
             "deterministic",
+            "paths",
         }
         unknown_keys = sorted(set(defaults.keys()) - allowed_keys)
         if unknown_keys:
@@ -456,14 +458,13 @@ def save_auto_inference_config(
 
     model_path = best_ckpt_path or str(RUNS_DIR / train_name / "weights" / "best.pt")
     infer_yaml = {
+        "paths": default_paths_config(),
         "model": to_project_relative(model_path),
         "imgsz": int(imgsz),
         "conf": 0.25,
         "iou": 0.70,
         "output": f"submission/{infer_default_submission_name(inference_stem)}.csv",
-        "test_images": to_project_relative(DEFAULT_TEST_IMAGES_DIR),
         "data": to_project_relative(data_yaml),
-        "json_dir": to_project_relative(DEFAULT_JSON_DIR),
         "save_config": True,
     }
     with infer_config_path.open("w", encoding="utf-8") as f:

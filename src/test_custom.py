@@ -26,12 +26,14 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.append(str(PROJECT_ROOT))
 
+from src.utils.config_paths import apply_inference_config_paths, default_paths_config
 from src.utils.logging_utils import start_run_logging
 from src.utils.metrics_utils import collect_runtime_env, percentile_ms, write_metrics_json
+from src.utils.project_paths import CURATED_TRAIN_ANNOTATIONS_DIR, TEST_IMAGES_DIR
 
-DEFAULT_TEST_IMG_DIR = PROJECT_ROOT / "data" / "raw" / "sprint_ai_project1_data" / "test_images"
+DEFAULT_TEST_IMG_DIR = TEST_IMAGES_DIR
 DEFAULT_YAML_PATH = PROJECT_ROOT / "data" / "yolo_dataset" / "dataset.yaml"
-DEFAULT_JSON_DIR = PROJECT_ROOT / "data" / "raw" / "sprint_ai_project1_data" / "train_annotations"
+DEFAULT_JSON_DIR = CURATED_TRAIN_ANNOTATIONS_DIR
 DEFAULT_INFER_METRICS_DIR = PROJECT_ROOT / "metrics" / "infer"
 
 
@@ -115,7 +117,7 @@ def parse_args():
     parser.add_argument("--output", type=str, default="submission.csv", help="결과를 저장할 CSV 파일명")
     parser.add_argument("--data", type=str, default=str(DEFAULT_YAML_PATH), help="학습 시 사용한 dataset.yaml 경로 (클래스 이름 매핑용)")
     parser.add_argument("--test_images", type=str, default=str(DEFAULT_TEST_IMG_DIR), help="추론을 수행할 이미지들이 담긴 폴더 경로")
-    parser.add_argument("--json_dir", type=str, default=str(DEFAULT_JSON_DIR), help="원본 COCO 어노테이션 폴더 (클래스 ID 역매핑을 위한 원본 정보 추출용)")
+    parser.add_argument("--json_dir", type=str, default=str(DEFAULT_JSON_DIR), help="정제된 COCO 어노테이션 폴더 (클래스 ID 역매핑용 source of truth)")
     
     # 실험 관리 (Reproducibility) 관련
     parser.add_argument(
@@ -166,6 +168,7 @@ def save_inference_config(args, next_id):
     # Remove config itself from the saved file to avoid recursion
     if 'config' in config_data:
         del config_data['config']
+    config_data["paths"] = default_paths_config()
         
     with open(save_path, 'w', encoding='utf-8') as f:
         yaml.dump(config_data, f, default_flow_style=False, allow_unicode=True)
@@ -188,7 +191,7 @@ def run_test_and_save_csv():
     if cli_args.config:
         print(f"Loading config from: {cli_args.config}")
         with open(cli_args.config, 'r', encoding='utf-8') as f:
-            config_data = yaml.safe_load(f)
+            config_data = apply_inference_config_paths(yaml.safe_load(f) or {})
         
         # Override CLI args with config file values (unless explicitly provided in CLI)
         # For simplicity, we prioritize the config file if --config is passed

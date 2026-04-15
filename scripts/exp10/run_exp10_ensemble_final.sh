@@ -49,7 +49,7 @@ echo " Fusing TEST predictions..."
 python src/ensemble_wbf.py --iou 0.6 \
     --csvs submission/exp10_seed42_test.csv submission/exp10_seed123_test.csv submission/exp10_seed777_test.csv \
     --output submission/exp10_final_submission.csv \
-    --image_dir data/raw/sprint_ai_project1_data/test_images
+    --image_dir data/raw/test_images
 
 # B. 로컬 검증용 병합
 echo " Fusing VALIDATION predictions..."
