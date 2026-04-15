@@ -1,0 +1,81 @@
+{
+    "images": [
+        {
+            "file_name": "K-003483-025367-025469-035206_0_2_0_2_90_000_200.png",
+            "width": 976,
+            "height": 1280,
+            "imgfile": "K-003483-025367-025469-035206_0_2_0_2_90_000_200.png",
+            "drug_N": "K-035206",
+            "drug_S": "정상알약",
+            "back_color": "연회색 배경",
+            "drug_dir": "앞면",
+            "light_color": "주백색",
+            "camera_la": 90,
+            "camera_lo": 0,
+            "size": 200,
+            "dl_idx": "35206",
+            "dl_mapping_code": "K-035206",
+            "dl_name": "아토젯정 10/40mg",
+            "dl_name_en": "Atozet Tab. 10/40mg",
+            "img_key": "http://connectdi.com/design/img/drug/1NVzhGcz6U5.jpg",
+            "dl_material": "에제티미브|아토르바스타틴칼슘삼수화물",
+            "dl_material_en": "Atorvastatin Calcium Trihydrate| Ezetimibe",
+            "dl_custom_shape": "정제, 저작정",
+            "dl_company": "한국엠에스디(주)",
+            "dl_company_en": "Msd Korea",
+            "di_company_mf": "",
+            "di_company_mf_en": "",
+            "item_seq": 201500365,
+            "di_item_permit_date": "20150123",
+            "di_class_no": "[02180]동맥경화용제",
+            "di_etc_otc_code": "전문의약품",
+            "di_edi_code": "655501870",
+            "chart": "백색 내지 미백색의 한 면에 337이 새겨진 양면이 볼록한 캡슐모양의 필름코팅정",
+            "drug_shape": "타원형",
+            "thick": 7,
+            "leng_long": 17,
+            "leng_short": 7,
+            "print_front": "337",
+            "print_back": "",
+            "color_class1": "하양",
+            "color_class2": "",
+            "line_front": "",
+            "line_back": "",
+            "img_regist_ts": "20150226",
+            "form_code_name": "필름코팅정",
+            "mark_code_front_anal": "",
+            "mark_code_back_anal": "",
+            "mark_code_front_img": "",
+            "mark_code_back_img": "",
+            "mark_code_front": "",
+            "mark_code_back": "",
+            "change_date": "20190805",
+            "id": 849
+        }
+    ],
+    "type": "instances",
+    "annotations": [
+        {
+            "area": 92460,
+            "iscrowd": 0,
+            "bbox": [
+                613,
+                117,
+                230,
+                402
+            ],
+            "category_id": 35206,
+            "ignore": 0,
+            "segmentation": [],
+            "id": 3215,
+            "image_id": 849
+        }
+    ],
+    "categories": [
+        {
+            "supercategory": "pill",
+            "id": 35206,
+            "name": "아토젯정 10/40mg"
+        }
+    ]
+}

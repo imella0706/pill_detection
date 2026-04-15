@@ -1,0 +1,21 @@
+{
+  "experiment": "exp12_train_yolo11s_noflip",
+  "timestamp": "2026-03-26T23:31:56.769807",
+  "seed": 0,
+  "deterministic": true,
+  "dataset_split": "val",
+  "data": "data/yolo_dataset/dataset.yaml",
+  "model_path": "yolo11s.pt",
+  "model_name": "yolo11s",
+  "source_experiment": null,
+  "epoch": 50,
+  "imgsz": 960,
+  "batch": 16,
+  "best_epoch": 50,
+  "Precision": 0.9739874811943787,
+  "Recall": 0.9649191647843944,
+  "F1-Score": 0.9694321166144737,
+  "mAP50": 0.9945658341658338,
+  "mAP75": 0.9949999999999999,
+  "mAP50-95": 0.9932653831307097
+}

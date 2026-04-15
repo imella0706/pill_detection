@@ -1,0 +1,81 @@
+{
+    "images": [
+        {
+            "file_name": "K-001900-016551-029345-033208_0_2_0_2_75_000_200.png",
+            "width": 976,
+            "height": 1280,
+            "imgfile": "K-001900-016551-029345-033208_0_2_0_2_75_000_200.png",
+            "drug_N": "K-016551",
+            "drug_S": "정상알약",
+            "back_color": "연회색 배경",
+            "drug_dir": "앞면",
+            "light_color": "주백색",
+            "camera_la": 75,
+            "camera_lo": 0,
+            "size": 200,
+            "dl_idx": "16551",
+            "dl_mapping_code": "K-016551",
+            "dl_name": "동아가바펜틴정 800mg",
+            "dl_name_en": "Gabapentin Tab. 800mg Dong-A",
+            "img_key": "http://connectdi.com/design/img/drug/152484364307100015.jpg",
+            "dl_material": "가바펜틴",
+            "dl_material_en": "Gabapentin",
+            "dl_custom_shape": "정제, 저작정",
+            "dl_company": "동아에스티(주)",
+            "dl_company_en": "Dong-A St",
+            "di_company_mf": "고려제약(주)",
+            "di_company_mf_en": "Korean Drug",
+            "item_seq": 200500254,
+            "di_item_permit_date": "20051012",
+            "di_class_no": "[01130]항전간제",
+            "di_etc_otc_code": "전문의약품",
+            "di_edi_code": "642500340,A01508511",
+            "chart": "흰색의 타원형 필름코팅정제",
+            "drug_shape": "타원형",
+            "thick": 5.6,
+            "leng_long": 19.15,
+            "leng_short": 9.55,
+            "print_front": "DGTH",
+            "print_back": "800",
+            "color_class1": "하양",
+            "color_class2": "",
+            "line_front": "",
+            "line_back": "",
+            "img_regist_ts": "20070412",
+            "form_code_name": "필름코팅정",
+            "mark_code_front_anal": "",
+            "mark_code_back_anal": "",
+            "mark_code_front_img": "",
+            "mark_code_back_img": "",
+            "mark_code_front": "",
+            "mark_code_back": "",
+            "change_date": "20190124",
+            "id": 283
+        }
+    ],
+    "type": "instances",
+    "annotations": [
+        {
+            "area": 140740,
+            "iscrowd": 0,
+            "bbox": [
+                549,
+                171,
+                310,
+                454
+            ],
+            "category_id": 16551,
+            "ignore": 0,
+            "segmentation": [],
+            "id": 1066,
+            "image_id": 283
+        }
+    ],
+    "categories": [
+        {
+            "supercategory": "pill",
+            "id": 16551,
+            "name": "동아가바펜틴정 800mg"
+        }
+    ]
+}

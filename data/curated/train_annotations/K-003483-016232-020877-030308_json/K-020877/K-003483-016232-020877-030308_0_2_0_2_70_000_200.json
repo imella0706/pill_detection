@@ -1,0 +1,81 @@
+{
+    "images": [
+        {
+            "file_name": "K-003483-016232-020877-030308_0_2_0_2_70_000_200.png",
+            "width": 976,
+            "height": 1280,
+            "imgfile": "K-003483-016232-020877-030308_0_2_0_2_70_000_200.png",
+            "drug_N": "K-020877",
+            "drug_S": "정상알약",
+            "back_color": "연회색 배경",
+            "drug_dir": "앞면",
+            "light_color": "주백색",
+            "camera_la": 70,
+            "camera_lo": 0,
+            "size": 200,
+            "dl_idx": "20877",
+            "dl_mapping_code": "K-020877",
+            "dl_name": "엑스포지정 5/160mg",
+            "dl_name_en": "Exforge Tab. 5/160mg",
+            "img_key": "http://connectdi.com/design/img/drug/1MecIOjA6Yf.jpg",
+            "dl_material": "발사르탄|암로디핀베실산염",
+            "dl_material_en": "Amlodipine Besylate| Valsartan",
+            "dl_custom_shape": "정제, 저작정",
+            "dl_company": "한국노바티스(주)",
+            "dl_company_en": "Novartis Korea",
+            "di_company_mf": "Novartis Pharma Stein AG",
+            "di_company_mf_en": "",
+            "item_seq": 200703803,
+            "di_item_permit_date": "20070403",
+            "di_class_no": "[02140]혈압강하제",
+            "di_etc_otc_code": "전문의약품",
+            "di_edi_code": "653600850,E01631481",
+            "chart": "어두운 황색의 달걀형 필름코팅정",
+            "drug_shape": "타원형",
+            "thick": 4,
+            "leng_long": 14,
+            "leng_short": 5.5,
+            "print_front": "NVR",
+            "print_back": "ECE",
+            "color_class1": "노랑",
+            "color_class2": "",
+            "line_front": "",
+            "line_back": "",
+            "img_regist_ts": "20070518",
+            "form_code_name": "필름코팅정",
+            "mark_code_front_anal": "",
+            "mark_code_back_anal": "",
+            "mark_code_front_img": "",
+            "mark_code_back_img": "",
+            "mark_code_front": "",
+            "mark_code_back": "",
+            "change_date": "20200601",
+            "id": 769
+        }
+    ],
+    "type": "instances",
+    "annotations": [
+        {
+            "area": 76845,
+            "iscrowd": 0,
+            "bbox": [
+                544,
+                294,
+                327,
+                235
+            ],
+            "category_id": 20877,
+            "ignore": 0,
+            "segmentation": [],
+            "id": 2927,
+            "image_id": 769
+        }
+    ],
+    "categories": [
+        {
+            "supercategory": "pill",
+            "id": 20877,
+            "name": "엑스포지정 5/160mg"
+        }
+    ]
+}

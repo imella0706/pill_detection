@@ -1,0 +1,81 @@
+{
+    "images": [
+        {
+            "file_name": "K-003351-032310-036637_0_2_0_2_90_000_200.png",
+            "width": 976,
+            "height": 1280,
+            "imgfile": "K-003351-032310-036637_0_2_0_2_90_000_200.png",
+            "drug_N": "K-032310",
+            "drug_S": "정상알약",
+            "back_color": "연회색 배경",
+            "drug_dir": "앞면",
+            "light_color": "주백색",
+            "camera_la": 90,
+            "camera_lo": 0,
+            "size": 200,
+            "dl_idx": "32310",
+            "dl_mapping_code": "K-032310",
+            "dl_name": "글리아타민연질캡슐",
+            "dl_name_en": "",
+            "img_key": "http://connectdi.com/design/img/drug/154039561327900002.jpg",
+            "dl_material": "콜린알포세레이트",
+            "dl_material_en": "Choline alfoscerate",
+            "dl_custom_shape": "연질캡슐제",
+            "dl_company": "대웅바이오(주)",
+            "dl_company_en": "Daewoong Bio",
+            "di_company_mf": "(주)서흥, (주)알피바이오, 코스맥스파마(주)",
+            "di_company_mf_en": "Suheung, Rp Bio, Cosmax Pharma",
+            "item_seq": 201310719,
+            "di_item_permit_date": "20131217",
+            "di_class_no": "[01190]기타의 중추신경용약",
+            "di_etc_otc_code": "전문의약품",
+            "di_edi_code": "694000600",
+            "chart": "무색투명의 점조한 액을 넣은 담황색을 띤 타원형의 연질캡슐제",
+            "drug_shape": "타원형",
+            "thick": 8.5,
+            "leng_long": 15.5,
+            "leng_short": 8.5,
+            "print_front": "글리아타민",
+            "print_back": "",
+            "color_class1": "갈색",
+            "color_class2": "",
+            "line_front": "",
+            "line_back": "",
+            "img_regist_ts": "20151001",
+            "form_code_name": "연질캡슐제, 액상",
+            "mark_code_front_anal": "",
+            "mark_code_back_anal": "",
+            "mark_code_front_img": "",
+            "mark_code_back_img": "",
+            "mark_code_front": "",
+            "mark_code_back": "",
+            "change_date": "20210728",
+            "id": 651
+        }
+    ],
+    "type": "instances",
+    "annotations": [
+        {
+            "area": 103342,
+            "iscrowd": 0,
+            "bbox": [
+                28,
+                801,
+                326,
+                317
+            ],
+            "category_id": 32310,
+            "ignore": 0,
+            "segmentation": [],
+            "id": 2459,
+            "image_id": 651
+        }
+    ],
+    "categories": [
+        {
+            "supercategory": "pill",
+            "id": 32310,
+            "name": "글리아타민연질캡슐"
+        }
+    ]
+}

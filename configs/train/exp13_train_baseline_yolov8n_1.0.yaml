@@ -1,0 +1,47 @@
+name: "exp13_train_baseline_yolov8n_1.0"
+model: "yolov8n.pt"
+data: "data/datasets/yolo/copy_paste/cp_t20_data_seed42/dataset.yaml"
+epochs: 50 # default
+imgsz: 640 # default
+batch: 16
+workers: 8 # default
+patience: 100 # default
+amp: true # default
+close_mosaic: 10 # default
+
+# Optimization
+optimizer: "auto" # default
+lr0: 0.01 # default
+lrf: 0.01 # default
+momentum: 0.937 # default
+weight_decay: 0.0005 # default
+warmup_epochs: 3.0 # default
+warmup_momentum: 0.8 # default
+warmup_bias_lr: 0.1 # default
+cos_lr: true # default
+pretrained: true # default
+resume: false # default
+
+# Augmentation (baseline2.0과 비교 대조 실험 시 100% 일치 필수)
+hsv_h: 0.015 # default
+hsv_s: 0.7 # default
+hsv_v: 0.4 # default
+translate: 0.1 # default
+scale: 0.5 # default
+shear: 0.0 # default
+perspective: 0.0 # default
+fliplr: 0.0 # default
+flipud: 0.0 # default
+degrees: 0.0 # default
+mosaic: 1.0 # default
+copy_paste: 0.0 # default
+mixup: 0.0 # default
+erasing: 0.4 # default
+auto_augment: "randaugment" # default
+
+# 재현성 보장
+seed: 42
+deterministic: true # default
+
+# Device
+device: "0" # default

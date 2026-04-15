@@ -1,0 +1,81 @@
+{
+    "images": [
+        {
+            "file_name": "K-001900-016548-024850-029345_0_2_0_2_70_000_200.png",
+            "width": 976,
+            "height": 1280,
+            "imgfile": "K-001900-016548-024850-029345_0_2_0_2_70_000_200.png",
+            "drug_N": "K-001900",
+            "drug_S": "정상알약",
+            "back_color": "연회색 배경",
+            "drug_dir": "앞면",
+            "light_color": "주백색",
+            "camera_la": 70,
+            "camera_lo": 0,
+            "size": 200,
+            "dl_idx": "1900",
+            "dl_mapping_code": "K-001900",
+            "dl_name": "보령부스파정 5mg",
+            "dl_name_en": "Buspar Tab. 5mg Boryung",
+            "img_key": "http://connectdi.com/design/img/drug/1Mxwka5v0lL.jpg",
+            "dl_material": "부스피론염산염",
+            "dl_material_en": "Buspirone Hydrochloride",
+            "dl_custom_shape": "정제, 저작정",
+            "dl_company": "보령제약(주)",
+            "dl_company_en": "Boryung",
+            "di_company_mf": "",
+            "di_company_mf_en": "",
+            "item_seq": 198700706,
+            "di_item_permit_date": "19870323",
+            "di_class_no": "[01170]정신신경용제",
+            "di_etc_otc_code": "전문의약품",
+            "di_edi_code": "641901280,A09302381",
+            "chart": "이약은 양면볼록한 장방형의 흰색정제이다",
+            "drug_shape": "장방형",
+            "thick": 2.5,
+            "leng_long": 8,
+            "leng_short": 4.5,
+            "print_front": "BSP",
+            "print_back": "5",
+            "color_class1": "하양",
+            "color_class2": "",
+            "line_front": "",
+            "line_back": "",
+            "img_regist_ts": "20070910",
+            "form_code_name": "나정",
+            "mark_code_front_anal": "",
+            "mark_code_back_anal": "",
+            "mark_code_front_img": "",
+            "mark_code_back_img": "",
+            "mark_code_front": "",
+            "mark_code_back": "",
+            "change_date": "20160825",
+            "id": 1001
+        }
+    ],
+    "type": "instances",
+    "annotations": [
+        {
+            "area": 27641,
+            "iscrowd": 0,
+            "bbox": [
+                685,
+                807,
+                131,
+                211
+            ],
+            "category_id": 1900,
+            "ignore": 0,
+            "segmentation": [],
+            "id": 3793,
+            "image_id": 1001
+        }
+    ],
+    "categories": [
+        {
+            "supercategory": "pill",
+            "id": 1900,
+            "name": "보령부스파정 5mg"
+        }
+    ]
+}

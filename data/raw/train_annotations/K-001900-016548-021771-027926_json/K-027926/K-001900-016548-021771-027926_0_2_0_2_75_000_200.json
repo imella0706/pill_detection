@@ -1,0 +1,81 @@
+{
+    "images": [
+        {
+            "file_name": "K-001900-016548-021771-027926_0_2_0_2_75_000_200.png",
+            "width": 976,
+            "height": 1280,
+            "imgfile": "K-001900-016548-021771-027926_0_2_0_2_75_000_200.png",
+            "drug_N": "K-027926",
+            "drug_S": "정상알약",
+            "back_color": "연회색 배경",
+            "drug_dir": "앞면",
+            "light_color": "주백색",
+            "camera_la": 75,
+            "camera_lo": 0,
+            "size": 200,
+            "dl_idx": "27926",
+            "dl_mapping_code": "K-027926",
+            "dl_name": "울트라셋이알서방정",
+            "dl_name_en": "Ultracet ER Tab.",
+            "img_key": "http://connectdi.com/design/img/drug/1NOwp2F6It9.jpg",
+            "dl_material": "아세트아미노펜|트라마돌염산염",
+            "dl_material_en": "Acetaminophen| Tramadol Hydrochloride",
+            "dl_custom_shape": "서방형정제",
+            "dl_company": "(주)한국얀센",
+            "dl_company_en": "Janssen Korea",
+            "di_company_mf": "",
+            "di_company_mf_en": "",
+            "item_seq": 201006967,
+            "di_item_permit_date": "20101122",
+            "di_class_no": "[01140]해열.진통.소염제",
+            "di_etc_otc_code": "전문의약품",
+            "di_edi_code": "646901630",
+            "chart": "노란색의 장방형 필름코팅 서방정제",
+            "drug_shape": "타원형",
+            "thick": 7,
+            "leng_long": 19,
+            "leng_short": 9,
+            "print_front": "T/A ER",
+            "print_back": "",
+            "color_class1": "노랑",
+            "color_class2": "",
+            "line_front": "",
+            "line_back": "",
+            "img_regist_ts": "20150416",
+            "form_code_name": "서방성필름코팅정",
+            "mark_code_front_anal": "",
+            "mark_code_back_anal": "",
+            "mark_code_front_img": "",
+            "mark_code_back_img": "",
+            "mark_code_front": "",
+            "mark_code_back": "",
+            "change_date": "20210706",
+            "id": 77
+        }
+    ],
+    "type": "instances",
+    "annotations": [
+        {
+            "area": 127368,
+            "iscrowd": 0,
+            "bbox": [
+                572,
+                629,
+                261,
+                488
+            ],
+            "category_id": 27926,
+            "ignore": 0,
+            "segmentation": [],
+            "id": 287,
+            "image_id": 77
+        }
+    ],
+    "categories": [
+        {
+            "supercategory": "pill",
+            "id": 27926,
+            "name": "울트라셋이알서방정"
+        }
+    ]
+}

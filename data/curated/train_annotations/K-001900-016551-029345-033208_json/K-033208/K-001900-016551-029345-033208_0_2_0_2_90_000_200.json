@@ -1,0 +1,81 @@
+{
+    "images": [
+        {
+            "file_name": "K-001900-016551-029345-033208_0_2_0_2_90_000_200.png",
+            "width": 976,
+            "height": 1280,
+            "imgfile": "K-001900-016551-029345-033208_0_2_0_2_90_000_200.png",
+            "drug_N": "K-033208",
+            "drug_S": "정상알약",
+            "back_color": "연회색 배경",
+            "drug_dir": "앞면",
+            "light_color": "주백색",
+            "camera_la": 90,
+            "camera_lo": 0,
+            "size": 200,
+            "dl_idx": "33208",
+            "dl_mapping_code": "K-033208",
+            "dl_name": "에스원엠프정 20mg",
+            "dl_name_en": "Eswonamp Tab. 20mg",
+            "img_key": "http://connectdi.com/design/img/drug/1MYTX0L3Ktb.jpg",
+            "dl_material": "에스오메프라졸마그네슘삼수화물",
+            "dl_material_en": "Esomeprazole Magnesium Dihydrate",
+            "dl_custom_shape": "정제, 저작정",
+            "dl_company": "대원제약(주)",
+            "dl_company_en": "Daewon Pharmaceutical",
+            "di_company_mf": "",
+            "di_company_mf_en": "",
+            "item_seq": 201402463,
+            "di_item_permit_date": "20140530",
+            "di_class_no": "[02320]소화성궤양용제",
+            "di_etc_otc_code": "전문의약품",
+            "di_edi_code": "671805710",
+            "chart": "연분홍색의 원형 필름코팅정",
+            "drug_shape": "원형",
+            "thick": 3.7,
+            "leng_long": 7.9,
+            "leng_short": 7.9,
+            "print_front": "20S",
+            "print_back": "",
+            "color_class1": "분홍",
+            "color_class2": "",
+            "line_front": "",
+            "line_back": "",
+            "img_regist_ts": "20140711",
+            "form_code_name": "필름코팅정",
+            "mark_code_front_anal": "",
+            "mark_code_back_anal": "",
+            "mark_code_front_img": "",
+            "mark_code_back_img": "",
+            "mark_code_front": "",
+            "mark_code_back": "",
+            "change_date": "20190912",
+            "id": 285
+        }
+    ],
+    "type": "instances",
+    "annotations": [
+        {
+            "area": 42824,
+            "iscrowd": 0,
+            "bbox": [
+                683,
+                835,
+                212,
+                202
+            ],
+            "category_id": 33208,
+            "ignore": 0,
+            "segmentation": [],
+            "id": 1062,
+            "image_id": 285
+        }
+    ],
+    "categories": [
+        {
+            "supercategory": "pill",
+            "id": 33208,
+            "name": "에스원엠프정 20mg"
+        }
+    ]
+}

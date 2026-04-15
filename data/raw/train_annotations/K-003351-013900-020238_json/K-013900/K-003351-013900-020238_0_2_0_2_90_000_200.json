@@ -1,0 +1,81 @@
+{
+    "images": [
+        {
+            "file_name": "K-003351-013900-020238_0_2_0_2_90_000_200.png",
+            "width": 976,
+            "height": 1280,
+            "imgfile": "K-003351-013900-020238_0_2_0_2_90_000_200.png",
+            "drug_N": "K-013900",
+            "drug_S": "정상알약",
+            "back_color": "연회색 배경",
+            "drug_dir": "앞면",
+            "light_color": "주백색",
+            "camera_la": 90,
+            "camera_lo": 0,
+            "size": 200,
+            "dl_idx": "13900",
+            "dl_mapping_code": "K-013900",
+            "dl_name": "에빅사정(메만틴염산염)(비매품)",
+            "dl_name_en": "Ebixa Tab.",
+            "img_key": "http://connectdi.com/design/img/drug/150825481273500012.jpg",
+            "dl_material": "메만틴염산염",
+            "dl_material_en": "Memantine Hydrochloride",
+            "dl_custom_shape": "정제, 저작정",
+            "dl_company": "한국룬드벡(주)",
+            "dl_company_en": "Lundbeck Korea",
+            "di_company_mf": "",
+            "di_company_mf_en": "",
+            "item_seq": 200308324,
+            "di_item_permit_date": "20030918",
+            "di_class_no": "[01190]기타의 중추신경용약",
+            "di_etc_otc_code": "전문의약품",
+            "di_edi_code": "668000040,E25650021",
+            "chart": "연한 노랑에서 노란색의 타원형 필름코팅정",
+            "drug_shape": "타원형",
+            "thick": 3.5,
+            "leng_long": 11.2,
+            "leng_short": 5.2,
+            "print_front": "M분할선",
+            "print_back": "1분할선0",
+            "color_class1": "노랑",
+            "color_class2": "",
+            "line_front": "-",
+            "line_back": "-",
+            "img_regist_ts": "20120619",
+            "form_code_name": "필름코팅정",
+            "mark_code_front_anal": "",
+            "mark_code_back_anal": "",
+            "mark_code_front_img": "",
+            "mark_code_back_img": "",
+            "mark_code_front": "",
+            "mark_code_back": "",
+            "change_date": "20201207",
+            "id": 1437
+        }
+    ],
+    "type": "instances",
+    "annotations": [
+        {
+            "area": 45936,
+            "iscrowd": 0,
+            "bbox": [
+                641,
+                713,
+                174,
+                264
+            ],
+            "category_id": 13900,
+            "ignore": 0,
+            "segmentation": [],
+            "id": 5453,
+            "image_id": 1437
+        }
+    ],
+    "categories": [
+        {
+            "supercategory": "pill",
+            "id": 13900,
+            "name": "에빅사정(메만틴염산염)(비매품)"
+        }
+    ]
+}

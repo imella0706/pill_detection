@@ -1,0 +1,12 @@
+{
+  "run_name": "exp21M0_yolo11s_res960_mosaic00",
+  "timestamp": "2026-03-31T22:25:13.963288",
+  "model_path": "runs/exp21M0_train_yolo11s_res960_mosaic00/weights/best.pt",
+  "output_csv": "/home/imella0707/PillaTech_team04/submission/exp21M0_yolo11s_res960_mosaic00.csv",
+  "os_platform": "Linux-5.15.153.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "python_version": "3.12.12",
+  "torch_version": "2.5.1+cu121",
+  "cuda_version": "12.1",
+  "gpu_name": "NVIDIA GeForce RTX 3060",
+  "gpu_driver": "556.12"
+}

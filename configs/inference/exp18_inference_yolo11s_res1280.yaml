@@ -1,0 +1,9 @@
+model: runs/exp18_train_yolo11s_res1280/weights/best.pt
+imgsz: 1280
+conf: 0.25
+iou: 0.7
+output: submission/exp18_yolo11s_res1280.csv
+test_images: data/raw/sprint_ai_project1_data/test_images
+data: data/datasets/yolo/copy_paste/cp_t20_data_seed42/dataset.yaml
+json_dir: data/raw/sprint_ai_project1_data/train_annotations
+save_config: true

@@ -1,0 +1,18 @@
+data: data/datasets/yolo/copy_paste/cp_t20_data_seed42/dataset.yaml
+model: yolo11s.pt
+epochs: 50
+imgsz: 960
+batch: 16
+name: pill_exp10_seed123
+device: "0"
+
+# Augmentations
+fliplr: 0.0
+flipud: 0.0
+degrees: 0.0
+mosaic: 1.0
+copy_paste: 0.0
+
+# Reproducibility
+seed: 123
+deterministic: True

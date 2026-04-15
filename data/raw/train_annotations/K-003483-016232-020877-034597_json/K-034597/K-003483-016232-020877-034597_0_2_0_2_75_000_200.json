@@ -1,0 +1,81 @@
+{
+    "images": [
+        {
+            "file_name": "K-003483-016232-020877-034597_0_2_0_2_75_000_200.png",
+            "width": 976,
+            "height": 1280,
+            "imgfile": "K-003483-016232-020877-034597_0_2_0_2_75_000_200.png",
+            "drug_N": "K-034597",
+            "drug_S": "정상알약",
+            "back_color": "연회색 배경",
+            "drug_dir": "앞면",
+            "light_color": "주백색",
+            "camera_la": 75,
+            "camera_lo": 0,
+            "size": 200,
+            "dl_idx": "34597",
+            "dl_mapping_code": "K-034597",
+            "dl_name": "제미메트서방정 50/1000mg",
+            "dl_name_en": "Zemimet SR Tab. 50/1000mg",
+            "img_key": "http://connectdi.com/design/img/drug/147426964205900067.jpg",
+            "dl_material": "제미글립틴타르타르산염1.5수화물|메트포르민염산염",
+            "dl_material_en": "Gemigliptin Tartrate Sesquihydrate| Metformin Hydrochloride",
+            "dl_custom_shape": "서방형정제",
+            "dl_company": "(주)엘지화학",
+            "dl_company_en": "Lg Chem",
+            "di_company_mf": "",
+            "di_company_mf_en": "",
+            "item_seq": 201405223,
+            "di_item_permit_date": "20141107",
+            "di_class_no": "[03960]당뇨병용제",
+            "di_etc_otc_code": "전문의약품",
+            "di_edi_code": "668902910",
+            "chart": "갈색 장방형의 필름코팅정",
+            "drug_shape": "장방형",
+            "thick": 8.25,
+            "leng_long": 19.81,
+            "leng_short": 10.07,
+            "print_front": "마크",
+            "print_back": "5010",
+            "color_class1": "분홍",
+            "color_class2": "",
+            "line_front": "",
+            "line_back": "",
+            "img_regist_ts": "20160224",
+            "form_code_name": "서방성필름코팅정",
+            "mark_code_front_anal": "LG~,LG",
+            "mark_code_back_anal": "",
+            "mark_code_front_img": "http://connectdi.com/design/img/drug/147938661567700181.jpg",
+            "mark_code_back_img": "",
+            "mark_code_front": "",
+            "mark_code_back": "",
+            "change_date": "20210513",
+            "id": 558
+        }
+    ],
+    "type": "instances",
+    "annotations": [
+        {
+            "area": 181440,
+            "iscrowd": 0,
+            "bbox": [
+                34,
+                113,
+                448,
+                405
+            ],
+            "category_id": 34597,
+            "ignore": 0,
+            "segmentation": [],
+            "id": 2106,
+            "image_id": 558
+        }
+    ],
+    "categories": [
+        {
+            "supercategory": "pill",
+            "id": 34597,
+            "name": "제미메트서방정 50/1000mg"
+        }
+    ]
+}

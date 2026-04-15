@@ -1,0 +1,81 @@
+{
+    "images": [
+        {
+            "file_name": "K-003351-016688-019232_0_2_0_2_90_000_200.png",
+            "width": 976,
+            "height": 1280,
+            "imgfile": "K-003351-016688-019232_0_2_0_2_90_000_200.png",
+            "drug_N": "K-016688",
+            "drug_S": "정상알약",
+            "back_color": "연회색 배경",
+            "drug_dir": "앞면",
+            "light_color": "주백색",
+            "camera_la": 90,
+            "camera_lo": 0,
+            "size": 200,
+            "dl_idx": "16688",
+            "dl_mapping_code": "K-016688",
+            "dl_name": "오마코연질캡슐(오메가-3-산에틸에스테르90)",
+            "dl_name_en": "Omacor Soft Cap.",
+            "img_key": "http://connectdi.com/design/img/drug/147428171237500005.jpg",
+            "dl_material": "오메가-3-산에틸에스테르90",
+            "dl_material_en": "Omega-3-Acid Ethyl Esters90",
+            "dl_custom_shape": "연질캡슐제",
+            "dl_company": "건일제약(주)",
+            "dl_company_en": "Kuhnil",
+            "di_company_mf": "",
+            "di_company_mf_en": "",
+            "item_seq": 200500497,
+            "di_item_permit_date": "20050915",
+            "di_class_no": "[02180]동맥경화용제",
+            "di_etc_otc_code": "전문의약품",
+            "di_edi_code": "646801100,A03805911",
+            "chart": "미황색의 유성물질이 충전된 투명한 장방형 연질캡슐",
+            "drug_shape": "장방형",
+            "thick": 9.8,
+            "leng_long": 24,
+            "leng_short": 9.8,
+            "print_front": "OMACOR",
+            "print_back": "",
+            "color_class1": "노랑, 투명",
+            "color_class2": "",
+            "line_front": "",
+            "line_back": "",
+            "img_regist_ts": "20051221",
+            "form_code_name": "연질캡슐제, 액상",
+            "mark_code_front_anal": "",
+            "mark_code_back_anal": "",
+            "mark_code_front_img": "",
+            "mark_code_back_img": "",
+            "mark_code_front": "",
+            "mark_code_back": "",
+            "change_date": "20200706",
+            "id": 1317
+        }
+    ],
+    "type": "instances",
+    "annotations": [
+        {
+            "area": 189504,
+            "iscrowd": 0,
+            "bbox": [
+                555,
+                581,
+                288,
+                658
+            ],
+            "category_id": 16688,
+            "ignore": 0,
+            "segmentation": [],
+            "id": 5015,
+            "image_id": 1317
+        }
+    ],
+    "categories": [
+        {
+            "supercategory": "pill",
+            "id": 16688,
+            "name": "오마코연질캡슐(오메가-3-산에틸에스테르90)"
+        }
+    ]
+}

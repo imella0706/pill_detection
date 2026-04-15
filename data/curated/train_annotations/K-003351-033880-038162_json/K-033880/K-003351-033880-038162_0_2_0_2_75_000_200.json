@@ -1,0 +1,81 @@
+{
+    "images": [
+        {
+            "file_name": "K-003351-033880-038162_0_2_0_2_75_000_200.png",
+            "width": 976,
+            "height": 1280,
+            "imgfile": "K-003351-033880-038162_0_2_0_2_75_000_200.png",
+            "drug_N": "K-033880",
+            "drug_S": "정상알약",
+            "back_color": "연회색 배경",
+            "drug_dir": "앞면",
+            "light_color": "주백색",
+            "camera_la": 70,
+            "camera_lo": 0,
+            "size": 200,
+            "dl_idx": "33880",
+            "dl_mapping_code": "K-033880",
+            "dl_name": "글리틴정(콜린알포세레이트)",
+            "dl_name_en": "Glitin Tab.",
+            "img_key": "http://connectdi.com/design/img/drug/1McvZckolrt.jpg",
+            "dl_material": "콜린알포세레이트",
+            "dl_material_en": "Choline Alfoscerate",
+            "dl_custom_shape": "정제, 저작정",
+            "dl_company": "제일약품(주)",
+            "dl_company_en": "Jeil Pharmaceutical",
+            "di_company_mf": "",
+            "di_company_mf_en": "",
+            "item_seq": 201403839,
+            "di_item_permit_date": "20140819",
+            "di_class_no": "[01190]기타의 중추신경용약",
+            "di_etc_otc_code": "전문의약품",
+            "di_edi_code": "645404270",
+            "chart": "담황색의 달걀형 필름코팅정제",
+            "drug_shape": "타원형",
+            "thick": 6.6,
+            "leng_long": 17.6,
+            "leng_short": 9.2,
+            "print_front": "",
+            "print_back": "JIC",
+            "color_class1": "주황",
+            "color_class2": "",
+            "line_front": "",
+            "line_back": "",
+            "img_regist_ts": "20190312",
+            "form_code_name": "필름코팅정",
+            "mark_code_front_anal": "",
+            "mark_code_back_anal": "",
+            "mark_code_front_img": "",
+            "mark_code_back_img": "",
+            "mark_code_front": "",
+            "mark_code_back": "",
+            "change_date": "20210728",
+            "id": 1406
+        }
+    ],
+    "type": "instances",
+    "annotations": [
+        {
+            "area": 124700,
+            "iscrowd": 0,
+            "bbox": [
+                70, 
+                590, 
+                290, 
+                430
+            ],
+            "category_id": 33880,
+            "ignore": 0,
+            "segmentation": [],
+            "id": 5346,
+            "image_id": 1405
+        }
+    ],
+    "categories": [
+        {
+            "supercategory": "pill",
+            "id": 33880,
+            "name": "글리틴정(콜린알포세레이트)"
+        }
+    ]
+}

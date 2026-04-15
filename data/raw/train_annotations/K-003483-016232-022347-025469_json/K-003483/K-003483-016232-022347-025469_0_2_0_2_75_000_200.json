@@ -1,0 +1,81 @@
+{
+    "images": [
+        {
+            "file_name": "K-003483-016232-022347-025469_0_2_0_2_75_000_200.png",
+            "width": 976,
+            "height": 1280,
+            "imgfile": "K-003483-016232-022347-025469_0_2_0_2_75_000_200.png",
+            "drug_N": "K-003483",
+            "drug_S": "정상알약",
+            "back_color": "연회색 배경",
+            "drug_dir": "앞면",
+            "light_color": "주백색",
+            "camera_la": 75,
+            "camera_lo": 0,
+            "size": 200,
+            "dl_idx": "3483",
+            "dl_mapping_code": "K-003483",
+            "dl_name": "기넥신에프정(은행엽엑스)(수출용)",
+            "dl_name_en": "Ginexin-F Tab.",
+            "img_key": "http://connectdi.com/design/img/drug/148609543321800170.jpg",
+            "dl_material": "은행엽건조엑스",
+            "dl_material_en": "Ginkgo Leaf Ext.",
+            "dl_custom_shape": "정제, 저작정",
+            "dl_company": "에스케이케미칼(주)",
+            "dl_company_en": "Sk Chemicals",
+            "di_company_mf": "",
+            "di_company_mf_en": "",
+            "item_seq": 199102014,
+            "di_item_permit_date": "19910906",
+            "di_class_no": "[02190]기타의 순환계용약",
+            "di_etc_otc_code": "일반의약품",
+            "di_edi_code": "644700130,A18901361",
+            "chart": "진녹색의 타원형 필름 코팅정",
+            "drug_shape": "장방형",
+            "thick": 3.9,
+            "leng_long": 11.1,
+            "leng_short": 6.1,
+            "print_front": "SK",
+            "print_back": "G40",
+            "color_class1": "초록",
+            "color_class2": "",
+            "line_front": "",
+            "line_back": "",
+            "img_regist_ts": "20041222",
+            "form_code_name": "필름코팅정",
+            "mark_code_front_anal": "",
+            "mark_code_back_anal": "",
+            "mark_code_front_img": "",
+            "mark_code_back_img": "",
+            "mark_code_front": "",
+            "mark_code_back": "",
+            "change_date": "20200723",
+            "id": 813
+        }
+    ],
+    "type": "instances",
+    "annotations": [
+        {
+            "area": 54990,
+            "iscrowd": 0,
+            "bbox": [
+                574,
+                811,
+                282,
+                195
+            ],
+            "category_id": 3483,
+            "ignore": 0,
+            "segmentation": [],
+            "id": 3080,
+            "image_id": 813
+        }
+    ],
+    "categories": [
+        {
+            "supercategory": "pill",
+            "id": 3483,
+            "name": "기넥신에프정(은행엽엑스)(수출용)"
+        }
+    ]
+}

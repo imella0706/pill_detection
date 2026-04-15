@@ -1,0 +1,24 @@
+# Exp 11 Cleaned Baseline Configuration
+# 원본 Exp 5의 설정(yolo11s, 960px, batch 16 등)을 유지하면서
+# 데이터 정제의 순수 ROI(Return on Investment)만을 측정하기 위한 설정.
+
+name: "exp11_train_yolo11s_flip"
+model: "yolo11s.pt"
+epochs: 50
+imgsz: 960
+batch: 16
+
+# 재현성 보장 (가장 중요)
+seed: 0
+deterministic: true
+
+# Augmentation (Error state: fliplr included)
+fliplr: 0.5 # (데이터 정제는 했지만, 뒤집기가 켜져 망한 케이스)
+flipud: 0.0
+degrees: 0.0
+mosaic: 1.0
+copy_paste: 0.0
+mixup: 0.0
+
+# Device
+device: "0"

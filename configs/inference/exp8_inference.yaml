@@ -1,0 +1,7 @@
+model: runs/pill_exp5_yolo11s_copypaste/weights/best.pt
+imgsz: 1024
+conf: 0.2
+iou: 0.6
+output: submission/exp8_submission_iou0.6.csv
+data: data/datasets/yolo/copy_paste/cp_t20_data_seed42/dataset.yaml
+test_images: data/raw/sprint_ai_project1_data/test_images

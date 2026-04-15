@@ -1,0 +1,81 @@
+{
+    "images": [
+        {
+            "file_name": "K-003483-020877-031885-036637_0_2_0_2_90_000_200.png",
+            "width": 976,
+            "height": 1280,
+            "imgfile": "K-003483-020877-031885-036637_0_2_0_2_90_000_200.png",
+            "drug_N": "K-031885",
+            "drug_S": "정상알약",
+            "back_color": "연회색 배경",
+            "drug_dir": "앞면",
+            "light_color": "주백색",
+            "camera_la": 90,
+            "camera_lo": 0,
+            "size": 200,
+            "dl_idx": "31885",
+            "dl_mapping_code": "K-031885",
+            "dl_name": "자누메트엑스알서방정 100/1000mg",
+            "dl_name_en": "Janumet XR Tab. 100/1000mg",
+            "img_key": "http://connectdi.com/design/img/drug/1NVzhGcz6SP.jpg",
+            "dl_material": "메트포르민염산염|시타글립틴인산염수화물",
+            "dl_material_en": "Metformin Hydrochloride| Sitagliptin Phosphate Hydrate",
+            "dl_custom_shape": "서방형정제",
+            "dl_company": "한국엠에스디(주)",
+            "dl_company_en": "Msd Korea",
+            "di_company_mf": "",
+            "di_company_mf_en": "",
+            "item_seq": 201309418,
+            "di_item_permit_date": "20130924",
+            "di_class_no": "[03960]당뇨병용제",
+            "di_etc_otc_code": "전문의약품",
+            "di_edi_code": "655501800",
+            "chart": "밝은 파랑색으로 한 면에 81이 새겨진 양면이 볼록한 타원형의 필름코팅정",
+            "drug_shape": "타원형",
+            "thick": 8.3,
+            "leng_long": 22.2,
+            "leng_short": 11.2,
+            "print_front": "81",
+            "print_back": "",
+            "color_class1": "파랑",
+            "color_class2": "",
+            "line_front": "",
+            "line_back": "",
+            "img_regist_ts": "20131009",
+            "form_code_name": "필름코팅정",
+            "mark_code_front_anal": "",
+            "mark_code_back_anal": "",
+            "mark_code_front_img": "",
+            "mark_code_back_img": "",
+            "mark_code_front": "",
+            "mark_code_back": "",
+            "change_date": "20181112",
+            "id": 447
+        }
+    ],
+    "type": "instances",
+    "annotations": [
+        {
+            "area": 202800,
+            "iscrowd": 0,
+            "bbox": [
+                123,
+                105,
+                400,
+                507
+            ],
+            "category_id": 31885,
+            "ignore": 0,
+            "segmentation": [],
+            "id": 1683,
+            "image_id": 447
+        }
+    ],
+    "categories": [
+        {
+            "supercategory": "pill",
+            "id": 31885,
+            "name": "자누메트엑스알서방정 100/1000mg"
+        }
+    ]
+}

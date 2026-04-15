@@ -1,0 +1,12 @@
+{
+  "run_name": "exp17_yolo11s_res1024",
+  "timestamp": "2026-03-30T22:39:43.520725",
+  "model_path": "runs/exp17_train_yolo11s_res1024/weights/best.pt",
+  "output_csv": "/home/imella0707/PillaTech_team04/submission/exp17_yolo11s_res1024.csv",
+  "os_platform": "Linux-5.15.153.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "python_version": "3.12.12",
+  "torch_version": "2.5.1+cu121",
+  "cuda_version": "12.1",
+  "gpu_name": "NVIDIA GeForce RTX 3060",
+  "gpu_driver": "556.12"
+}

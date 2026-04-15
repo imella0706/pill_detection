@@ -1,0 +1,81 @@
+{
+    "images": [
+        {
+            "file_name": "K-003351-021325-032310_0_2_0_2_75_000_200.png",
+            "width": 976,
+            "height": 1280,
+            "imgfile": "K-003351-021325-032310_0_2_0_2_75_000_200.png",
+            "drug_N": "K-021325",
+            "drug_S": "정상알약",
+            "back_color": "연회색 배경",
+            "drug_dir": "앞면",
+            "light_color": "주백색",
+            "camera_la": 75,
+            "camera_lo": 0,
+            "size": 200,
+            "dl_idx": "21325",
+            "dl_mapping_code": "K-021325",
+            "dl_name": "아토르바정 10mg",
+            "dl_name_en": "Atorva Tab. 10mg",
+            "img_key": "http://connectdi.com/design/img/drug/152035092098100027.jpg",
+            "dl_material": "아토르바스타틴칼슘",
+            "dl_material_en": "Atorvastatin Calcium",
+            "dl_custom_shape": "정제, 저작정",
+            "dl_company": "(주)유한양행",
+            "dl_company_en": "Yuhan",
+            "di_company_mf": "",
+            "di_company_mf_en": "",
+            "item_seq": 200705992,
+            "di_item_permit_date": "20070525",
+            "di_class_no": "[02180]동맥경화용제",
+            "di_etc_otc_code": "전문의약품",
+            "di_edi_code": "642100980,A04507081",
+            "chart": "흰색의 타원형 필름코팅정",
+            "drug_shape": "타원형",
+            "thick": 3.83,
+            "leng_long": 9.7,
+            "leng_short": 5.08,
+            "print_front": "YH",
+            "print_back": "10",
+            "color_class1": "하양",
+            "color_class2": "",
+            "line_front": "",
+            "line_back": "",
+            "img_regist_ts": "20080417",
+            "form_code_name": "필름코팅정",
+            "mark_code_front_anal": "",
+            "mark_code_back_anal": "",
+            "mark_code_front_img": "",
+            "mark_code_back_img": "",
+            "mark_code_front": "",
+            "mark_code_back": "",
+            "change_date": "20190805",
+            "id": 1382
+        }
+    ],
+    "type": "instances",
+    "annotations": [
+        {
+            "area": 36646,
+            "iscrowd": 0,
+            "bbox": [
+                48,
+                808,
+                251,
+                146
+            ],
+            "category_id": 21325,
+            "ignore": 0,
+            "segmentation": [],
+            "id": 5263,
+            "image_id": 1382
+        }
+    ],
+    "categories": [
+        {
+            "supercategory": "pill",
+            "id": 21325,
+            "name": "아토르바정 10mg"
+        }
+    ]
+}

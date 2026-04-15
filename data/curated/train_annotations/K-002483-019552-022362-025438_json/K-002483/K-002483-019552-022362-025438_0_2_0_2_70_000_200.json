@@ -1,0 +1,81 @@
+{
+    "images": [
+        {
+            "file_name": "K-002483-019552-022362-025438_0_2_0_2_70_000_200.png",
+            "width": 976,
+            "height": 1280,
+            "imgfile": "K-002483-019552-022362-025438_0_2_0_2_70_000_200.png",
+            "drug_N": "K-002483",
+            "drug_S": "정상알약",
+            "back_color": "연회색 배경",
+            "drug_dir": "앞면",
+            "light_color": "주백색",
+            "camera_la": 70,
+            "camera_lo": 0,
+            "size": 200,
+            "dl_idx": "2483",
+            "dl_mapping_code": "K-002483",
+            "dl_name": "뮤테란캡슐 100mg",
+            "dl_name_en": "Muteran Cap. 100mg",
+            "img_key": "http://connectdi.com/design/img/drug/1M_4NHfUrnp.jpg",
+            "dl_material": "아세틸시스테인",
+            "dl_material_en": "Acetylcysteine",
+            "dl_custom_shape": "경질캡슐제",
+            "dl_company": "한화제약(주)",
+            "dl_company_en": "Hanwha Pharma",
+            "di_company_mf": "",
+            "di_company_mf_en": "",
+            "item_seq": 198801531,
+            "di_item_permit_date": "19880629",
+            "di_class_no": "[02220]진해거담제",
+            "di_etc_otc_code": "일반의약품",
+            "di_edi_code": "651600290,A15301201",
+            "chart": "흰색의 분말이 충진된 상하 녹색의 경질캡슐제",
+            "drug_shape": "장방형",
+            "thick": 6.8,
+            "leng_long": 19,
+            "leng_short": 6.4,
+            "print_front": "Hanwha MUC100",
+            "print_back": "",
+            "color_class1": "초록",
+            "color_class2": "초록",
+            "line_front": "",
+            "line_back": "",
+            "img_regist_ts": "20191226",
+            "form_code_name": "경질캡슐제, 산제",
+            "mark_code_front_anal": "",
+            "mark_code_back_anal": "",
+            "mark_code_front_img": "",
+            "mark_code_back_img": "",
+            "mark_code_front": "",
+            "mark_code_back": "",
+            "change_date": "20190627",
+            "id": 775
+        }
+    ],
+    "type": "instances",
+    "annotations": [
+        {
+            "area": 123066,
+            "iscrowd": 0,
+            "bbox": [
+                80,
+                659,
+                258,
+                477
+            ],
+            "category_id": 2483,
+            "ignore": 0,
+            "segmentation": [],
+            "id": 2943,
+            "image_id": 775
+        }
+    ],
+    "categories": [
+        {
+            "supercategory": "pill",
+            "id": 2483,
+            "name": "뮤테란캡슐 100mg"
+        }
+    ]
+}

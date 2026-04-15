@@ -1,0 +1,81 @@
+{
+    "images": [
+        {
+            "file_name": "K-003351-019232-036637_0_2_0_2_90_000_200.png",
+            "width": 976,
+            "height": 1280,
+            "imgfile": "K-003351-019232-036637_0_2_0_2_90_000_200.png",
+            "drug_N": "K-019232",
+            "drug_S": "정상알약",
+            "back_color": "연회색 배경",
+            "drug_dir": "앞면",
+            "light_color": "주백색",
+            "camera_la": 90,
+            "camera_lo": 0,
+            "size": 200,
+            "dl_idx": "19232",
+            "dl_mapping_code": "K-019232",
+            "dl_name": "콜리네이트연질캡슐 400mg",
+            "dl_name_en": "Cholinate Soft Cap.",
+            "img_key": "http://connectdi.com/design/img/drug/1NOwp2F6DrW.jpg",
+            "dl_material": "콜린알포세레이트",
+            "dl_material_en": "Choline Alfoscerate",
+            "dl_custom_shape": "연질캡슐제",
+            "dl_company": "한미약품(주)",
+            "dl_company_en": "Hanmi Pharm",
+            "di_company_mf": "",
+            "di_company_mf_en": "",
+            "item_seq": 200605445,
+            "di_item_permit_date": "20060616",
+            "di_class_no": "[01190]기타의 중추신경용약",
+            "di_etc_otc_code": "전문의약품",
+            "di_edi_code": "643502600,A21404481",
+            "chart": "무색투명의 액을 넣은 연한 노란색을 띤 타원형의 연질캡슐",
+            "drug_shape": "타원형",
+            "thick": 9,
+            "leng_long": 14.3,
+            "leng_short": 9,
+            "print_front": "HM-CN",
+            "print_back": "",
+            "color_class1": "갈색",
+            "color_class2": "",
+            "line_front": "",
+            "line_back": "",
+            "img_regist_ts": "20070823",
+            "form_code_name": "연질캡슐제, 액상",
+            "mark_code_front_anal": "",
+            "mark_code_back_anal": "",
+            "mark_code_front_img": "",
+            "mark_code_back_img": "",
+            "mark_code_front": "",
+            "mark_code_back": "",
+            "change_date": "20210728",
+            "id": 303
+        }
+    ],
+    "type": "instances",
+    "annotations": [
+        {
+            "area": 88179,
+            "iscrowd": 0,
+            "bbox": [
+                142,
+                736,
+                273,
+                323
+            ],
+            "category_id": 19232,
+            "ignore": 0,
+            "segmentation": [],
+            "id": 1132,
+            "image_id": 303
+        }
+    ],
+    "categories": [
+        {
+            "supercategory": "pill",
+            "id": 19232,
+            "name": "콜리네이트연질캡슐 400mg"
+        }
+    ]
+}

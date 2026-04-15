@@ -1,0 +1,81 @@
+{
+    "images": [
+        {
+            "file_name": "K-003351-035206-041768_0_2_0_2_90_000_200.png",
+            "width": 976,
+            "height": 1280,
+            "imgfile": "K-003351-035206-041768_0_2_0_2_90_000_200.png",
+            "drug_N": "K-041768",
+            "drug_S": "정상알약",
+            "back_color": "연회색 배경",
+            "drug_dir": "앞면",
+            "light_color": "주백색",
+            "camera_la": 90,
+            "camera_lo": 0,
+            "size": 200,
+            "dl_idx": "41768",
+            "dl_mapping_code": "K-041768",
+            "dl_name": "카발린캡슐 25mg",
+            "dl_name_en": "Kabalin Cap. 25mg",
+            "img_key": "http://connectdi.com/design/img/drug/150159525484900185.jpg",
+            "dl_material": "프레가발린",
+            "dl_material_en": "Pregabalin",
+            "dl_custom_shape": "경질캡슐제",
+            "dl_company": "에이치케이이노엔(주)",
+            "dl_company_en": "Hk Inno.N",
+            "di_company_mf": "",
+            "di_company_mf_en": "",
+            "item_seq": 201702674,
+            "di_item_permit_date": "20170529",
+            "di_class_no": "[01190]기타의 중추신경용약",
+            "di_etc_otc_code": "전문의약품",
+            "di_edi_code": "640007120",
+            "chart": "흰색 또는 회백색의 분말이 든 상부 미황색, 하부 흰색의 경질캡슐제",
+            "drug_shape": "장방형",
+            "thick": 5.32,
+            "leng_long": 14.2,
+            "leng_short": 5.05,
+            "print_front": "CJ PGN   25",
+            "print_back": "",
+            "color_class1": "노랑",
+            "color_class2": "하양",
+            "line_front": "",
+            "line_back": "",
+            "img_regist_ts": "20170725",
+            "form_code_name": "경질캡슐제, 산제",
+            "mark_code_front_anal": "",
+            "mark_code_back_anal": "",
+            "mark_code_front_img": "",
+            "mark_code_back_img": "",
+            "mark_code_front": "",
+            "mark_code_back": "",
+            "change_date": "20210609",
+            "id": 18
+        }
+    ],
+    "type": "instances",
+    "annotations": [
+        {
+            "area": 82384,
+            "iscrowd": 0,
+            "bbox": [
+                603,
+                733,
+                271,
+                304
+            ],
+            "category_id": 41768,
+            "ignore": 0,
+            "segmentation": [],
+            "id": 66,
+            "image_id": 18
+        }
+    ],
+    "categories": [
+        {
+            "supercategory": "pill",
+            "id": 41768,
+            "name": "카발린캡슐 25mg"
+        }
+    ]
+}

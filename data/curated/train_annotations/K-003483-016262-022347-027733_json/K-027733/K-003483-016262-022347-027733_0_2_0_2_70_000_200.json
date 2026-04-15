@@ -1,0 +1,81 @@
+{
+    "images": [
+        {
+            "file_name": "K-003483-016262-022347-027733_0_2_0_2_70_000_200.png",
+            "width": 976,
+            "height": 1280,
+            "imgfile": "K-003483-016262-022347-027733_0_2_0_2_70_000_200.png",
+            "drug_N": "K-027733",
+            "drug_S": "정상알약",
+            "back_color": "연회색 배경",
+            "drug_dir": "앞면",
+            "light_color": "주백색",
+            "camera_la": 70,
+            "camera_lo": 0,
+            "size": 200,
+            "dl_idx": "27733",
+            "dl_mapping_code": "K-027733",
+            "dl_name": "트윈스타정 40/5mg",
+            "dl_name_en": "Twynsta Tab. 40/5mg",
+            "img_key": "http://connectdi.com/design/img/drug/1MnfO1MVz0w.jpg",
+            "dl_material": "텔미사르탄|암로디핀베실산염",
+            "dl_material_en": "Amlodipine Besylate| Telmisartan　",
+            "dl_custom_shape": "정제, 저작정",
+            "dl_company": "한국베링거인겔하임(주)",
+            "dl_company_en": "Boehringer Ingelheim Korea",
+            "di_company_mf": "",
+            "di_company_mf_en": "",
+            "item_seq": 201005081,
+            "di_item_permit_date": "20100819",
+            "di_class_no": "[02140]혈압강하제",
+            "di_etc_otc_code": "전문의약품",
+            "di_edi_code": "653501270",
+            "chart": "흰색과 연한 파란색의 양면이 볼록한 타원형 이중정이다.",
+            "drug_shape": "타원형",
+            "thick": 5,
+            "leng_long": 14,
+            "leng_short": 6.8,
+            "print_front": "마크 A1",
+            "print_back": "",
+            "color_class1": "하양",
+            "color_class2": "파랑",
+            "line_front": "",
+            "line_back": "",
+            "img_regist_ts": "20101027",
+            "form_code_name": "다층정",
+            "mark_code_front_anal": "집,화살,교회",
+            "mark_code_back_anal": "",
+            "mark_code_front_img": "http://connectdi.com/design/img/drug/147938647484100129.jpg",
+            "mark_code_back_img": "",
+            "mark_code_front": "",
+            "mark_code_back": "",
+            "change_date": "20200304",
+            "id": 397
+        }
+    ],
+    "type": "instances",
+    "annotations": [
+        {
+            "area": 80332,
+            "iscrowd": 0,
+            "bbox": [
+                565,
+                262,
+                302,
+                266
+            ],
+            "category_id": 27733,
+            "ignore": 0,
+            "segmentation": [],
+            "id": 1499,
+            "image_id": 397
+        }
+    ],
+    "categories": [
+        {
+            "supercategory": "pill",
+            "id": 27733,
+            "name": "트윈스타정 40/5mg"
+        }
+    ]
+}

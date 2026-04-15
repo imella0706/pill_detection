@@ -1,0 +1,53 @@
+name: "exp25LD1_train_yolo11s_res960_hsvh020_mosaic00_box750_cls050_dfl200"
+model: "yolo11s.pt"
+data: "data/datasets/yolo/copy_paste/cp_t20_data_seed42/dataset.yaml"
+epochs: 50
+imgsz: 960
+batch: 16
+workers: 8
+patience: 100
+amp: true
+close_mosaic: 10
+
+# Optimization (Exp22-H3M0과 동일, loss gain만 변경)
+optimizer: "AdamW"
+lr0: 0.000167
+lrf: 0.01
+momentum: 0.9
+weight_decay: 0.0005
+warmup_epochs: 3.0
+warmup_momentum: 0.8
+warmup_bias_lr: 0.0
+cos_lr: true
+pretrained: true
+resume: false
+
+# Loss gain
+box: 7.5
+cls: 0.5
+# [변경 변수] dfl: 1.5 -> 2.0
+dfl: 2.0
+
+# Augmentation
+hsv_h: 0.020
+hsv_s: 0.7
+hsv_v: 0.4
+translate: 0.1
+scale: 0.5
+shear: 0.0
+perspective: 0.0
+fliplr: 0.0
+flipud: 0.0
+degrees: 0.0
+mosaic: 0.0
+copy_paste: 0.0
+mixup: 0.0
+erasing: 0.4
+auto_augment: "randaugment"
+
+# Reproducibility
+seed: 42
+deterministic: true
+
+# Device
+device: "0"

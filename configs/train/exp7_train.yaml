@@ -1,0 +1,13 @@
+data: data/datasets/yolo/copy_paste/cp_t20_data_seed42/dataset.yaml
+model: yolo11s.pt
+epochs: 50
+imgsz: 1024
+batch: 16
+name: pill_exp7_yolo11s_final
+device: "0"
+
+# Augmentations
+fliplr: 0.0
+flipud: 0.0
+degrees: 0.0
+mosaic: 1.0

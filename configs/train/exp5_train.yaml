@@ -1,0 +1,17 @@
+# Exp 5 Baseline: YOLO11s + Stratified Split + Custom Copy-Paste + No-Flip
+# 이 파일은 Exp 5의 유전자를 보존하며, 팀원들이 실험을 상속받아 고도화할 때 베이스라인으로 사용함.
+
+model: yolo11s.pt
+epochs: 50
+imgsz: 960
+batch: 16
+name: pill_exp5_yolo11s_copypaste
+device: "0"  # 필요 시 인덱스 수정
+fliplr: 0.0
+flipud: 0.0
+degrees: 0.0
+mosaic: 1.0
+copy_paste: 0.0 #yolo자체의 copy_paste기능은 off
+mixup: 0.0
+seed: 0
+deterministic: true

@@ -1,0 +1,12 @@
+# Exp 12 Cleaned Baseline Inference Configuration
+# Exp 12(No-Flip + Data Cleaned) 가중치를 이용한 최종 제출용 설정.
+
+model: "runs/exp12_train_yolo11s_noflip/weights/best.pt"
+imgsz: 960
+conf: 0.25
+iou: 0.70
+output: "submission/exp12_true_cleaned_baseline.csv"
+test_images: "data/raw/sprint_ai_project1_data/test_images"
+data: "data/datasets/yolo/copy_paste/cp_t20_data_seed42/dataset.yaml"
+json_dir: "data/raw/sprint_ai_project1_data/train_annotations"
+save_config: true

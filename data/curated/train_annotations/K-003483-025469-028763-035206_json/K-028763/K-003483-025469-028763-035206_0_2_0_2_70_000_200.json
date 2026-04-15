@@ -1,0 +1,81 @@
+{
+    "images": [
+        {
+            "file_name": "K-003483-025469-028763-035206_0_2_0_2_70_000_200.png",
+            "width": 976,
+            "height": 1280,
+            "imgfile": "K-003483-025469-028763-035206_0_2_0_2_70_000_200.png",
+            "drug_N": "K-028763",
+            "drug_S": "정상알약",
+            "back_color": "연회색 배경",
+            "drug_dir": "앞면",
+            "light_color": "주백색",
+            "camera_la": 70,
+            "camera_lo": 0,
+            "size": 200,
+            "dl_idx": "28763",
+            "dl_mapping_code": "K-028763",
+            "dl_name": "트라젠타정(리나글립틴)",
+            "dl_name_en": "Trajenta Tab.",
+            "img_key": "http://connectdi.com/design/img/drug/1MnfO1MVz3z.jpg",
+            "dl_material": "리나글립틴",
+            "dl_material_en": "Linagliptin",
+            "dl_custom_shape": "정제, 저작정",
+            "dl_company": "한국베링거인겔하임(주)",
+            "dl_company_en": "Boehringer Ingelheim Korea",
+            "di_company_mf": "",
+            "di_company_mf_en": "",
+            "item_seq": 201106367,
+            "di_item_permit_date": "20110914",
+            "di_class_no": "[03960]당뇨병용제",
+            "di_etc_otc_code": "전문의약품",
+            "di_edi_code": "653501380",
+            "chart": "양쪽이 볼록하고 사각면이 날이 선 밝은 빨강색의 원형 필름코팅정. 한쪽 면에는 베링거인겔하임 표식, 다른 한쪽 면에는 ‘D5’가 새겨져 있다.",
+            "drug_shape": "원형",
+            "thick": 3.65,
+            "leng_long": 8.23,
+            "leng_short": 8.23,
+            "print_front": "마크",
+            "print_back": "D5",
+            "color_class1": "분홍",
+            "color_class2": "",
+            "line_front": "",
+            "line_back": "",
+            "img_regist_ts": "20110930",
+            "form_code_name": "필름코팅정",
+            "mark_code_front_anal": "집,화살,교회",
+            "mark_code_back_anal": "",
+            "mark_code_front_img": "http://connectdi.com/design/img/drug/147938647484100129.jpg",
+            "mark_code_back_img": "",
+            "mark_code_front": "",
+            "mark_code_back": "",
+            "change_date": "20210317",
+            "id": 270
+        }
+    ],
+    "type": "instances",
+    "annotations": [
+        {
+            "area": 48391,
+            "iscrowd": 0,
+            "bbox": [
+                645,
+                865,
+                223,
+                217
+            ],
+            "category_id": 28763,
+            "ignore": 0,
+            "segmentation": [],
+            "id": 1010,
+            "image_id": 270
+        }
+    ],
+    "categories": [
+        {
+            "supercategory": "pill",
+            "id": 28763,
+            "name": "트라젠타정(리나글립틴)"
+        }
+    ]
+}

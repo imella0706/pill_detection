@@ -1,0 +1,81 @@
+{
+    "images": [
+        {
+            "file_name": "K-002483-003743-012778-013395_0_2_0_2_75_000_200.png",
+            "width": 976,
+            "height": 1280,
+            "imgfile": "K-002483-003743-012778-013395_0_2_0_2_75_000_200.png",
+            "drug_N": "K-013395",
+            "drug_S": "정상알약",
+            "back_color": "연회색 배경",
+            "drug_dir": "앞면",
+            "light_color": "주백색",
+            "camera_la": 75,
+            "camera_lo": 0,
+            "size": 200,
+            "dl_idx": "13395",
+            "dl_mapping_code": "K-013395",
+            "dl_name": "써스펜8시간이알서방정 650mg",
+            "dl_name_en": "Suspen 8 hours ER Tab.",
+            "img_key": "http://connectdi.com/design/img/drug/153374287079500077.jpg",
+            "dl_material": "아세트아미노펜",
+            "dl_material_en": "Acetaminophen Encapsulated",
+            "dl_custom_shape": "서방형정제",
+            "dl_company": "한미약품(주)",
+            "dl_company_en": "Hanmi Pharm",
+            "di_company_mf": "코오롱제약(주)",
+            "di_company_mf_en": "Kolon Pharm",
+            "item_seq": 200301818,
+            "di_item_permit_date": "20030725",
+            "di_class_no": "[01140]해열.진통.소염제",
+            "di_etc_otc_code": "일반의약품",
+            "di_edi_code": "643501510,A21452301",
+            "chart": "이 약은 백색의 장방형 필름코팅정제이다.",
+            "drug_shape": "장방형",
+            "thick": 6.05,
+            "leng_long": 19.23,
+            "leng_short": 7.7,
+            "print_front": "SUSPEN  ER",
+            "print_back": "",
+            "color_class1": "하양",
+            "color_class2": "",
+            "line_front": "",
+            "line_back": "",
+            "img_regist_ts": "20041222",
+            "form_code_name": "서방성필름코팅정",
+            "mark_code_front_anal": "",
+            "mark_code_back_anal": "",
+            "mark_code_front_img": "",
+            "mark_code_back_img": "",
+            "mark_code_front": "",
+            "mark_code_back": "",
+            "change_date": "20190910",
+            "id": 408
+        }
+    ],
+    "type": "instances",
+    "annotations": [
+        {
+            "area": 129265,
+            "iscrowd": 0,
+            "bbox": [
+                643,
+                672,
+                251,
+                515
+            ],
+            "category_id": 13395,
+            "ignore": 0,
+            "segmentation": [],
+            "id": 1527,
+            "image_id": 408
+        }
+    ],
+    "categories": [
+        {
+            "supercategory": "pill",
+            "id": 13395,
+            "name": "써스펜8시간이알서방정 650mg"
+        }
+    ]
+}

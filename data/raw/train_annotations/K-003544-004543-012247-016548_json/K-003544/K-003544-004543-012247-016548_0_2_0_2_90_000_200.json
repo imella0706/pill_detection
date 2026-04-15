@@ -1,0 +1,81 @@
+{
+    "images": [
+        {
+            "file_name": "K-003544-004543-012247-016548_0_2_0_2_90_000_200.png",
+            "width": 976,
+            "height": 1280,
+            "imgfile": "K-003544-004543-012247-016548_0_2_0_2_90_000_200.png",
+            "drug_N": "K-003544",
+            "drug_S": "정상알약",
+            "back_color": "연회색 배경",
+            "drug_dir": "앞면",
+            "light_color": "주백색",
+            "camera_la": 90,
+            "camera_lo": 0,
+            "size": 200,
+            "dl_idx": "3544",
+            "dl_mapping_code": "K-003544",
+            "dl_name": "무코스타정(레바미피드)(비매품)",
+            "dl_name_en": "Mucosta Tab.",
+            "img_key": "http://connectdi.com/design/img/drug/1N1ddmFmE2M.jpg",
+            "dl_material": "레바미피드",
+            "dl_material_en": "Rebamipide",
+            "dl_custom_shape": "정제, 저작정",
+            "dl_company": "한국오츠카제약(주)",
+            "dl_company_en": "Korea Otsuka Pharmaceutical",
+            "di_company_mf": "",
+            "di_company_mf_en": "",
+            "item_seq": 199102825,
+            "di_item_permit_date": "19910731",
+            "di_class_no": "[02320]소화성궤양용제",
+            "di_etc_otc_code": "전문의약품",
+            "di_edi_code": "649900060,A42700141",
+            "chart": "백색의 원형필름코팅정",
+            "drug_shape": "원형",
+            "thick": 3.4,
+            "leng_long": 8.1,
+            "leng_short": 8.1,
+            "print_front": "OG33",
+            "print_back": "",
+            "color_class1": "하양",
+            "color_class2": "",
+            "line_front": "",
+            "line_back": "",
+            "img_regist_ts": "20041222",
+            "form_code_name": "필름코팅정",
+            "mark_code_front_anal": "",
+            "mark_code_back_anal": "",
+            "mark_code_front_img": "",
+            "mark_code_back_img": "",
+            "mark_code_front": "",
+            "mark_code_back": "",
+            "change_date": "20130904",
+            "id": 1258
+        }
+    ],
+    "type": "instances",
+    "annotations": [
+        {
+            "area": 41814,
+            "iscrowd": 0,
+            "bbox": [
+                133,
+                176,
+                207,
+                202
+            ],
+            "category_id": 3544,
+            "ignore": 0,
+            "segmentation": [],
+            "id": 4805,
+            "image_id": 1258
+        }
+    ],
+    "categories": [
+        {
+            "supercategory": "pill",
+            "id": 3544,
+            "name": "무코스타정(레바미피드)(비매품)"
+        }
+    ]
+}

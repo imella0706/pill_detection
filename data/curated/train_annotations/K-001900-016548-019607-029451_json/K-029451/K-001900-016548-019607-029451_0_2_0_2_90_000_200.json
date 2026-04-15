@@ -1,0 +1,81 @@
+{
+    "images": [
+        {
+            "file_name": "K-001900-016548-019607-029451_0_2_0_2_90_000_200.png",
+            "width": 976,
+            "height": 1280,
+            "imgfile": "K-001900-016548-019607-029451_0_2_0_2_90_000_200.png",
+            "drug_N": "K-029451",
+            "drug_S": "정상알약",
+            "back_color": "연회색 배경",
+            "drug_dir": "앞면",
+            "light_color": "주백색",
+            "camera_la": 90,
+            "camera_lo": 0,
+            "size": 200,
+            "dl_idx": "29451",
+            "dl_mapping_code": "K-029451",
+            "dl_name": "레일라정",
+            "dl_name_en": "LAYLA TAB.",
+            "img_key": "http://connectdi.com/design/img/drug/152285645249800077.jpg",
+            "dl_material": "당귀·모과·방풍·속단·오가피·우슬·위령선·육계·진교·천궁·천마·홍화25%에탄올연조엑스",
+            "dl_material_en": "Angelica·Chaenomeles·Ledebouriella·Dipsacus etc Soft Ext.",
+            "dl_custom_shape": "정제, 저작정",
+            "dl_company": "(주)한국피엠지제약",
+            "dl_company_en": "Pmg Pharm",
+            "di_company_mf": "",
+            "di_company_mf_en": "",
+            "item_seq": 201201587,
+            "di_item_permit_date": "20120313",
+            "di_class_no": "[01140]해열.진통.소염제",
+            "di_etc_otc_code": "전문의약품",
+            "di_edi_code": "697100230",
+            "chart": "황색의 타원형 필름코팅정",
+            "drug_shape": "타원형",
+            "thick": 5.2,
+            "leng_long": 16.4,
+            "leng_short": 8.1,
+            "print_front": "LΛYLΛ",
+            "print_back": "분할선",
+            "color_class1": "노랑",
+            "color_class2": "",
+            "line_front": "",
+            "line_back": "-",
+            "img_regist_ts": "20120410",
+            "form_code_name": "필름코팅정",
+            "mark_code_front_anal": "",
+            "mark_code_back_anal": "",
+            "mark_code_front_img": "",
+            "mark_code_back_img": "",
+            "mark_code_front": "",
+            "mark_code_back": "",
+            "change_date": "20170321",
+            "id": 36
+        }
+    ],
+    "type": "instances",
+    "annotations": [
+        {
+            "area": 106793,
+            "iscrowd": 0,
+            "bbox": [
+                505,
+                816,
+                397,
+                269
+            ],
+            "category_id": 29451,
+            "ignore": 0,
+            "segmentation": [],
+            "id": 131,
+            "image_id": 36
+        }
+    ],
+    "categories": [
+        {
+            "supercategory": "pill",
+            "id": 29451,
+            "name": "레일라정"
+        }
+    ]
+}

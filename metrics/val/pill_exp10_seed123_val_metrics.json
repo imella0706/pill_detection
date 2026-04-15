@@ -1,0 +1,15 @@
+{
+  "experiment": "pill_exp10_seed123",
+  "dataset_split": "val",
+  "data": "data/yolo_dataset/dataset.yaml",
+  "model_path": "yolo11s.pt",
+  "model_name": "yolo11s",
+  "source_experiment": null,
+  "epoch": 50,
+  "imgsz": 960,
+  "batch": 16,
+  "best_epoch": 50,
+  "mAP50": 0.994989711934156,
+  "mAP75": 0.9949999999999999,
+  "mAP50-95": 0.9904466116973308
+}

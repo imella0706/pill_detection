@@ -1,0 +1,24 @@
+# Exp 12 Cleaned Baseline Configuration (True A/B Test)
+# 원본 Exp 5의 설정(No-Flip: fliplr 0.0)을 완벽하게 재현하면서
+# 정제된 데이터셋(Exp 11)과의 순수 시너지를 측정하기 위한 설정.
+
+name: "exp12_train_yolo11s_noflip"
+model: "yolo11s.pt"
+epochs: 50
+imgsz: 960
+batch: 16
+
+# Augmentation (Exp 5와 100% 일치 필수)
+fliplr: 0.0
+flipud: 0.0
+degrees: 0.0
+mosaic: 1.0
+copy_paste: 0.0
+mixup: 0.0
+
+# 재현성 보장
+seed: 0
+deterministic: true
+
+# Device
+device: "0"
