@@ -230,7 +230,7 @@ credentials/
 data/raw/sprint_ai_project1_data/train_images/
 data/raw/sprint_ai_project1_data/test_images/
 
-# MLOps 리팩토링 이후 생성 산출물
+# MLOps 리팩토링 이후 생성
 data/processed/
 data/datasets/
 
