@@ -13,6 +13,7 @@ import argparse
 import csv
 import datetime
 import json
+import os
 import re
 import sys
 
@@ -21,6 +22,7 @@ import yaml
 from ultralytics import YOLO
 
 from src.utils.config_paths import apply_train_config_paths, default_paths_config
+from src.utils.data_lineage_utils import load_data_lineage
 from src.utils.logging_utils import start_run_logging
 from src.utils.metrics_utils import collect_runtime_env
 from src.utils.project_paths import CURATED_TRAIN_ANNOTATIONS_DIR, PROJECT_ROOT, TEST_IMAGES_DIR
@@ -321,6 +323,32 @@ def build_parser(defaults: dict) -> argparse.ArgumentParser:
         default=float(defaults.get("mixup", 0.0)),
         help="mixup augmentation probability",
     )
+    default_enable_mlflow = bool(defaults.get("enable_mlflow", True))
+    parser.add_argument(
+        "--enable-mlflow",
+        dest="enable_mlflow",
+        action="store_true",
+        help="enable MLflow run logging",
+    )
+    parser.add_argument(
+        "--disable-mlflow",
+        dest="enable_mlflow",
+        action="store_false",
+        help="disable MLflow run logging",
+    )
+    parser.set_defaults(enable_mlflow=default_enable_mlflow)
+    parser.add_argument(
+        "--mlflow-tracking-uri",
+        type=str,
+        default=defaults.get("mlflow_tracking_uri"),
+        help="MLflow tracking URI. Falls back to MLFLOW_TRACKING_URI env var.",
+    )
+    parser.add_argument(
+        "--mlflow-experiment",
+        type=str,
+        default=defaults.get("mlflow_experiment", "pill_detection_v2_train"),
+        help="MLflow experiment name",
+    )
 
     return parser
 
@@ -380,6 +408,9 @@ def parse_args() -> argparse.Namespace:
             "mixup",
             "seed",
             "deterministic",
+            "enable_mlflow",
+            "mlflow_tracking_uri",
+            "mlflow_experiment",
             "paths",
         }
         unknown_keys = sorted(set(defaults.keys()) - allowed_keys)
@@ -440,6 +471,63 @@ def ensure_inference_token(stem: str) -> str:
 
 def infer_default_submission_name(inference_stem: str) -> str:
     return inference_stem.replace("_inference_", "_")
+
+
+def save_resolved_train_config(
+    train_save_dir: Path,
+    args: argparse.Namespace,
+    config: dict,
+    paths: dict[str, str],
+    data_yaml: Path,
+    data_lineage: dict,
+    device: str,
+) -> Path:
+    resolved_payload = {
+        "args": {
+            key: (str(value) if isinstance(value, Path) else value)
+            for key, value in vars(args).items()
+        },
+        "paths": paths,
+        "data_yaml": to_project_relative(data_yaml),
+        "device_resolved": device,
+        "data_lineage": data_lineage,
+        "source_config": str(args.config) if args.config else None,
+        "source_config_payload": config,
+    }
+    output_path = train_save_dir / "resolved_config.yaml"
+    output_path.write_text(
+        yaml.safe_dump(resolved_payload, allow_unicode=True, sort_keys=False),
+        encoding="utf-8",
+    )
+    return output_path
+
+
+def build_mlflow_context(args: argparse.Namespace) -> tuple[object | None, bool, str | None]:
+    tracking_uri = args.mlflow_tracking_uri or os.getenv("MLFLOW_TRACKING_URI")
+    if not args.enable_mlflow and not tracking_uri:
+        return None, False, tracking_uri
+
+    try:
+        import mlflow
+    except ImportError as exc:
+        raise RuntimeError(
+            "MLflow logging is enabled but `mlflow` is not installed. "
+            "Install it from requirements.txt or run with `--disable-mlflow`."
+        ) from exc
+
+    if tracking_uri:
+        mlflow.set_tracking_uri(tracking_uri)
+    mlflow.set_experiment(args.mlflow_experiment)
+    return mlflow, True, tracking_uri
+
+
+def safe_log_artifact(mlflow_module: object | None, path: Path, artifact_path: str | None = None) -> None:
+    if mlflow_module is None or not path.exists():
+        return
+    if artifact_path:
+        mlflow_module.log_artifact(str(path), artifact_path=artifact_path)
+        return
+    mlflow_module.log_artifact(str(path))
 
 
 def save_auto_inference_config(
@@ -518,6 +606,8 @@ def read_training_time_stats(run_dir: Path) -> dict:
 
 def main() -> None:
     args = parse_args()
+    training_config = load_config(args.config) if args.config else {"paths": default_paths_config()}
+    resolved_paths = training_config.get("paths") or default_paths_config()
     log_session = start_run_logging(
         project_root=PROJECT_ROOT,
         category="train",
@@ -536,6 +626,46 @@ def main() -> None:
     data_yaml = args.data or find_default_dataset_yaml()
     if not data_yaml.exists():
         raise FileNotFoundError(f"dataset.yaml not found: {data_yaml}")
+
+    processed_root = resolved_paths.get("processed_root", default_paths_config()["processed_root"])
+    data_lineage = load_data_lineage(
+        project_root=PROJECT_ROOT,
+        processed_root=processed_root,
+        data_yaml=data_yaml,
+    )
+    if data_lineage.get("manifest_path"):
+        print(f"Data manifest: {data_lineage['manifest_path']}")
+        print(f"Data version : {data_lineage.get('data_version')}")
+    else:
+        print("Data manifest: not found (training continues without data_version linkage)")
+
+    mlflow_module, mlflow_enabled, tracking_uri = build_mlflow_context(args)
+    mlflow_run = None
+    mlflow_run_id = None
+    if mlflow_enabled:
+        mlflow_run = mlflow_module.start_run(run_name=args.name)
+        mlflow_run_id = mlflow_run.info.run_id
+        mlflow_module.log_params(
+            {
+                "batch": int(args.batch),
+                "imgsz": int(args.imgsz),
+                "epochs": int(args.epochs),
+                "seed": int(args.seed),
+                "data_yaml": to_project_relative(data_yaml),
+            }
+        )
+        mlflow_module.set_tags(
+            {
+                "run_type": "train",
+                "device": device,
+                "tracking_uri": tracking_uri or "local_default",
+                "dataset_family": str(data_lineage.get("dataset_family") or "unknown"),
+                "variant_id": str(data_lineage.get("variant_id") or "unknown"),
+                "data_version": str(data_lineage.get("data_version") or "unknown"),
+                "dataset_hash": str(data_lineage.get("dataset_hash") or "unknown"),
+            }
+        )
+        print(f"MLflow run id: {mlflow_run_id}")
 
     # 👉 YOLO 모델 로드
     model = YOLO(args.model)
@@ -623,6 +753,15 @@ def main() -> None:
                 resolved_lr = first_group.get("lr")
                 resolved_weight_decay = first_group.get("weight_decay")
     train_time_stats = read_training_time_stats(train_save_dir)
+    resolved_config_path = save_resolved_train_config(
+        train_save_dir=train_save_dir,
+        args=args,
+        config=training_config,
+        paths=resolved_paths,
+        data_yaml=data_yaml,
+        data_lineage=data_lineage,
+        device=device,
+    )
 
     print("Training finished. Evaluating best model metrics...")
     
@@ -688,6 +827,9 @@ def main() -> None:
     metrics_payload = {
         "experiment": args.name,
         "timestamp": datetime.datetime.now().isoformat(),
+        "mlflow_enabled": mlflow_enabled,
+        "mlflow_experiment": args.mlflow_experiment,
+        "mlflow_tracking_uri": tracking_uri,
         "optimizer_requested": str(args.optimizer),
         "optimizer_resolved": resolved_optimizer,
         "optimizer_lr": float(resolved_lr) if resolved_lr is not None else None,
@@ -705,6 +847,10 @@ def main() -> None:
         "deterministic": args.deterministic,
         "dataset_split": "val",
         "data": str(data_yaml),
+        "manifest_path": data_lineage.get("manifest_path"),
+        "data_version": data_lineage.get("data_version"),
+        "dataset_hash": data_lineage.get("dataset_hash"),
+        "annotation_source_dir": data_lineage.get("annotation_source_dir"),
         "model_path": args.model,
         "model_name": infer_model_name(args.model),
         "source_experiment": infer_source_experiment(args.model),
@@ -728,17 +874,41 @@ def main() -> None:
         "mAP50-95": float(map50_95),
         "per_class_ap50_95": per_class_ap50_95,
     }
+    if mlflow_run_id is not None:
+        metrics_payload["mlflow_run_id"] = mlflow_run_id
     val_metrics_dir = METRICS_DIR / "val"
     val_metrics_dir.mkdir(parents=True, exist_ok=True)
     metrics_path = val_metrics_dir / f"{args.name}_val_metrics.json"
-    metrics_path.write_text(json.dumps(metrics_payload, indent=2), encoding="utf-8")
     infer_config_path = save_auto_inference_config(
         train_name=actual_run_name,
         best_ckpt_path=best_ckpt_path,
         data_yaml=data_yaml,
         imgsz=args.imgsz,
     )
-    
+    metrics_payload["resolved_config_path"] = to_project_relative(resolved_config_path)
+    metrics_payload["infer_config_path"] = to_project_relative(infer_config_path)
+    metrics_path.write_text(json.dumps(metrics_payload, indent=2), encoding="utf-8")
+    if mlflow_enabled:
+        mlflow_module.log_metrics(
+            {
+                "mAP50": float(map50),
+                "F1": float(f1_score),
+                "mAP75": float(map75),
+                "mAP50_95": float(map50_95),
+                "precision": float(precision),
+                "recall": float(recall),
+            }
+        )
+        safe_log_artifact(mlflow_module, Path(best_ckpt_path), artifact_path="model")
+        safe_log_artifact(mlflow_module, resolved_config_path, artifact_path="config")
+        safe_log_artifact(mlflow_module, metrics_path, artifact_path="metrics")
+        safe_log_artifact(mlflow_module, infer_config_path, artifact_path="config")
+        mlflow_module.set_tag("best_ckpt_path", to_project_relative(best_ckpt_path))
+        mlflow_module.set_tag("resolved_config_path", to_project_relative(resolved_config_path))
+        mlflow_module.set_tag("metrics_path", to_project_relative(metrics_path))
+        mlflow_module.set_tag("infer_config_path", to_project_relative(infer_config_path))
+        mlflow_run.end()
+
     print("\n" + "=" * 60)
     print(f"      EXPERIMENT REPORT: {args.name}")
     print("=" * 60)
@@ -762,6 +932,9 @@ def main() -> None:
             f" / avg {train_time_stats['avg_epoch_time_seconds']:.2f}s/epoch"
         )
     print(f" ➡️  saved:     {metrics_path}")
+    print(f" ➡️  config:    {resolved_config_path}")
+    if mlflow_run_id is not None:
+        print(f" ➡️  mlflow id: {mlflow_run_id}")
     print(f" ➡️  run dir:   {train_save_dir}")
     print(f" ➡️  infer cfg: {infer_config_path}")
     print("=" * 60 + "\n")
