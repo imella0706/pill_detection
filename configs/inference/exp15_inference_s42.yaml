@@ -1,0 +1,16 @@
+paths:
+  data_root: pill_detection_v2/data
+  image_root: data/raw
+  annotation_root: data/curated
+  processed_root: data/processed
+  datasets_root: data/datasets
+  train_images_dir: raw/train_images
+  test_images_dir: raw/test_images
+  annotation_source_dir: curated/train_annotations
+model: runs/exp15_s42/weights/best.pt
+imgsz: 320
+conf: 0.25
+iou: 0.7
+output: submission/exp15_s42.csv
+data: data/datasets/yolo/copy_paste/cp_t20_data_seed42/dataset.yaml
+save_config: true

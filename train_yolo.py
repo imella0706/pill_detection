@@ -12,10 +12,15 @@ from pathlib import Path
 import argparse
 import csv
 import datetime
+import getpass
 import json
 import os
 import re
 import sys
+from dotenv import load_dotenv
+
+# .env 파일 로드
+load_dotenv()
 
 import torch
 import yaml
@@ -353,6 +358,16 @@ def build_parser(defaults: dict) -> argparse.ArgumentParser:
     return parser
 
 
+def infer_run_name_from_config(config_path: Path | None, seed: int) -> str | None:
+    if config_path is None:
+        return None
+    match = re.search(r"^(exp\d+[A-Za-z0-9]*)", config_path.stem, flags=re.IGNORECASE)
+    if not match:
+        return None
+    exp_id = match.group(1)
+    return f"{exp_id}_s{seed}"
+
+
 def parse_args() -> argparse.Namespace:
     base = argparse.ArgumentParser(add_help=False)
     base.add_argument("--config", type=Path, default=None)
@@ -421,7 +436,13 @@ def parse_args() -> argparse.Namespace:
             )
 
     parser = build_parser(defaults)
-    return parser.parse_args()
+    args = parser.parse_args()
+    explicit_cli_name = "--name" in sys.argv
+    if not explicit_cli_name:
+        inferred_run_name = infer_run_name_from_config(args.config, int(args.seed))
+        if inferred_run_name:
+            args.name = inferred_run_name
+    return args
 
 
 def infer_source_experiment(model_path: str) -> str | None:
@@ -471,6 +492,51 @@ def ensure_inference_token(stem: str) -> str:
 
 def infer_default_submission_name(inference_stem: str) -> str:
     return inference_stem.replace("_inference_", "_")
+
+
+def _is_mlflow_scalar(value: object) -> bool:
+    return isinstance(value, (str, int, float, bool)) or value is None
+
+
+def _normalize_mlflow_param_value(value: object) -> str | int | float | bool:
+    if isinstance(value, Path):
+        return str(value)
+    if value is None:
+        return "null"
+    return value  # str/int/float/bool
+
+
+def flatten_mlflow_params(payload: dict, prefix: str = "") -> dict[str, str | int | float | bool]:
+    flattened: dict[str, str | int | float | bool] = {}
+    for key, value in payload.items():
+        flat_key = f"{prefix}.{key}" if prefix else str(key)
+        if isinstance(value, dict):
+            flattened.update(flatten_mlflow_params(value, prefix=flat_key))
+            continue
+        if _is_mlflow_scalar(value) or isinstance(value, Path):
+            flattened[flat_key] = _normalize_mlflow_param_value(value)
+    return flattened
+
+
+def build_resolved_mlflow_params(
+    args: argparse.Namespace,
+    resolved_paths: dict[str, str],
+    data_yaml: Path,
+    device: str,
+) -> dict[str, str | int | float | bool]:
+    args_payload = {
+        key: (str(value) if isinstance(value, Path) else value)
+        for key, value in vars(args).items()
+    }
+    payload = {
+        "args": args_payload,
+        "paths": resolved_paths,
+        "runtime": {
+            "data_yaml": to_project_relative(data_yaml),
+            "device_resolved": device,
+        },
+    }
+    return flatten_mlflow_params(payload)
 
 
 def save_resolved_train_config(
@@ -530,6 +596,49 @@ def safe_log_artifact(mlflow_module: object | None, path: Path, artifact_path: s
     mlflow_module.log_artifact(str(path))
 
 
+def prepare_mlflow_artifact_alias(source_path: Path, alias_path: Path) -> Path:
+    alias_path.parent.mkdir(parents=True, exist_ok=True)
+    alias_path.write_bytes(source_path.read_bytes())
+    return alias_path
+
+
+def disable_ultralytics_mlflow_callbacks(model: YOLO) -> None:
+    """Remove Ultralytics built-in MLflow callbacks so only project logging remains."""
+    callbacks = getattr(model, "callbacks", None)
+    if not isinstance(callbacks, dict):
+        return
+
+    removed = 0
+    for event, callback_list in callbacks.items():
+        if not isinstance(callback_list, list):
+            continue
+        filtered = []
+        for callback in callback_list:
+            module_name = getattr(callback, "__module__", "")
+            if module_name.endswith("ultralytics.utils.callbacks.mlflow"):
+                removed += 1
+                continue
+            filtered.append(callback)
+        callbacks[event] = filtered
+
+    if removed:
+        print(f"Ultralytics MLflow callbacks disabled: {removed}")
+
+
+def disable_ultralytics_mlflow_integration_in_process() -> None:
+    """Disable Ultralytics MLflow integration for this process only (no settings.json write)."""
+    try:
+        from ultralytics.utils import SETTINGS as ULTRALYTICS_SETTINGS
+    except Exception:
+        return
+
+    # SETTINGS is persisted; bypass its overridden __setitem__ to avoid writing settings.json.
+    try:
+        dict.__setitem__(ULTRALYTICS_SETTINGS, "mlflow", False)
+    except Exception:
+        return
+
+
 def save_auto_inference_config(
     train_name: str,
     best_ckpt_path: str | None,
@@ -544,8 +653,26 @@ def save_auto_inference_config(
     inference_stem = ensure_inference_token(train_name)
     infer_config_path = DEFAULT_INFER_CONFIG_DIR / f"{inference_stem}.yaml"
 
+    infer_yaml = build_inference_config_payload(
+        train_name=train_name,
+        best_ckpt_path=best_ckpt_path,
+        data_yaml=data_yaml,
+        imgsz=imgsz,
+    )
+    with infer_config_path.open("w", encoding="utf-8") as f:
+        yaml.dump(infer_yaml, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+    return infer_config_path
+
+
+def build_inference_config_payload(
+    train_name: str,
+    best_ckpt_path: str | None,
+    data_yaml: Path,
+    imgsz: int,
+) -> dict:
+    inference_stem = ensure_inference_token(train_name)
     model_path = best_ckpt_path or str(RUNS_DIR / train_name / "weights" / "best.pt")
-    infer_yaml = {
+    return {
         "paths": default_paths_config(),
         "model": to_project_relative(model_path),
         "imgsz": int(imgsz),
@@ -555,9 +682,6 @@ def save_auto_inference_config(
         "data": to_project_relative(data_yaml),
         "save_config": True,
     }
-    with infer_config_path.open("w", encoding="utf-8") as f:
-        yaml.dump(infer_yaml, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
-    return infer_config_path
 
 
 def read_training_time_stats(run_dir: Path) -> dict:
@@ -642,20 +766,26 @@ def main() -> None:
     mlflow_module, mlflow_enabled, tracking_uri = build_mlflow_context(args)
     mlflow_run = None
     mlflow_run_id = None
+    mlflow_params = build_resolved_mlflow_params(
+        args=args,
+        resolved_paths=resolved_paths,
+        data_yaml=data_yaml,
+        device=device,
+    )
     if mlflow_enabled:
+        # Ultralytics adds its own MLflow autolog callbacks by default; disable to avoid a second experiment/run.
+        disable_ultralytics_mlflow_integration_in_process()
         mlflow_run = mlflow_module.start_run(run_name=args.name)
         mlflow_run_id = mlflow_run.info.run_id
-        mlflow_module.log_params(
-            {
-                "batch": int(args.batch),
-                "imgsz": int(args.imgsz),
-                "epochs": int(args.epochs),
-                "seed": int(args.seed),
-                "data_yaml": to_project_relative(data_yaml),
-            }
-        )
+
+        # MLFLOW_USER 환경변수 또는 시스템 유저명 사용 (getpass가 더 견고함)
+        user_id = os.getenv("MLFLOW_USER") or getpass.getuser()
+
+        mlflow_module.log_params(mlflow_params)
         mlflow_module.set_tags(
             {
+                "mlflow.user": user_id,
+                "project": "pill_detection_v2",
                 "run_type": "train",
                 "device": device,
                 "tracking_uri": tracking_uri or "local_default",
@@ -666,74 +796,84 @@ def main() -> None:
             }
         )
         print(f"MLflow run id: {mlflow_run_id}")
+        print(f"MLflow params : {len(mlflow_params)} keys")
 
     # 👉 YOLO 모델 로드
     model = YOLO(args.model)
+    if mlflow_enabled:
+        disable_ultralytics_mlflow_callbacks(model)
 
     # 👉 학습
-    model.train(
-        data=str(data_yaml),
-        epochs=args.epochs,
-        imgsz=args.imgsz,
-        batch=args.batch,
-        device=device,
-        workers=args.workers,
-        patience=args.patience,
-        amp=args.amp,
+    try:
+        model.train(
+            data=str(data_yaml),
+            epochs=args.epochs,
+            imgsz=args.imgsz,
+            batch=args.batch,
+            device=device,
+            workers=args.workers,
+            patience=args.patience,
+            amp=args.amp,
 
-        # ⭐ 핵심: 절대경로 사용
-        project=str(RUNS_DIR),
+            # ⭐ 핵심: 절대경로 사용
+            project=str(RUNS_DIR),
 
-        # 실험 이름
-        name=args.name,
+            # 실험 이름
+            name=args.name,
 
-        save=True,
-        plots=True,
-        pretrained=args.pretrained,
-        resume=args.resume,
-        verbose=True,
-        optimizer=args.optimizer,
-        close_mosaic=args.close_mosaic,
-        box=args.box,
-        cls=args.cls,
-        dfl=args.dfl,
+            save=True,
+            plots=True,
+            pretrained=args.pretrained,
+            resume=args.resume,
+            verbose=True,
+            optimizer=args.optimizer,
+            close_mosaic=args.close_mosaic,
+            box=args.box,
+            cls=args.cls,
+            dfl=args.dfl,
 
 
-        # # === 실험 1: Baseline 증강 유지 ===
-        # fliplr=0.5,             # YOLOv8 기본값
-        # flipud=0.0,
-        # degrees=0.0,
-        # mosaic=1.0,
+            # # === 실험 1: Baseline 증강 유지 ===
+            # fliplr=0.5,             # YOLOv8 기본값
+            # flipud=0.0,
+            # degrees=0.0,
+            # mosaic=1.0,
 
-        # === 증강 설정 (명령어 인자 기반 제어) ===
-        hsv_h=args.hsv_h,
-        hsv_s=args.hsv_s,
-        hsv_v=args.hsv_v,
-        translate=args.translate,
-        scale=args.scale,
-        shear=args.shear,
-        perspective=args.perspective,
-        erasing=args.erasing,
-        auto_augment=args.auto_augment,
-        fliplr=args.fliplr,
-        flipud=args.flipud,
-        degrees=args.degrees,
-        mosaic=args.mosaic,
-        copy_paste=args.copy_paste,
-        mixup=args.mixup,
-        
-        # === 최적화 설정 (기본값 위주) ===
-        lr0=args.lr0,
-        lrf=args.lrf,
-        momentum=args.momentum,
-        weight_decay=args.weight_decay,
-        warmup_epochs=args.warmup_epochs,
-        warmup_momentum=args.warmup_momentum,
-        warmup_bias_lr=args.warmup_bias_lr,
-        cos_lr=args.cos_lr,
-        seed=args.seed,
-        deterministic=args.deterministic,
-    )
+            # === 증강 설정 (명령어 인자 기반 제어) ===
+            hsv_h=args.hsv_h,
+            hsv_s=args.hsv_s,
+            hsv_v=args.hsv_v,
+            translate=args.translate,
+            scale=args.scale,
+            shear=args.shear,
+            perspective=args.perspective,
+            erasing=args.erasing,
+            auto_augment=args.auto_augment,
+            fliplr=args.fliplr,
+            flipud=args.flipud,
+            degrees=args.degrees,
+            mosaic=args.mosaic,
+            copy_paste=args.copy_paste,
+            mixup=args.mixup,
+            
+            # === 최적화 설정 (기본값 위주) ===
+            lr0=args.lr0,
+            lrf=args.lrf,
+            momentum=args.momentum,
+            weight_decay=args.weight_decay,
+            warmup_epochs=args.warmup_epochs,
+            warmup_momentum=args.warmup_momentum,
+            warmup_bias_lr=args.warmup_bias_lr,
+            cos_lr=args.cos_lr,
+            seed=args.seed,
+            deterministic=args.deterministic,
+        )
+    except Exception:
+        if mlflow_enabled and mlflow_module is not None and mlflow_module.active_run() is not None:
+            mlflow_module.set_tag("run_status", "FAILED")
+            mlflow_module.set_tag("failed_stage", "train")
+            mlflow_module.end_run(status="FAILED")
+        raise
 
     # Capture the actual optimizer selected by Ultralytics, especially when optimizer='auto'.
     resolved_optimizer = "unknown"
@@ -793,11 +933,17 @@ def main() -> None:
 
     total_params = None
     trainable_params = None
-    model_module = getattr(model, "model", None)
-    if model_module is not None:
+    # Ultralytics may swap to EMA/eval weights for validation where requires_grad is False.
+    # Prefer the trainer's training model when available to avoid reporting trainable=0.
+    params_source = None
+    if trainer is not None:
+        params_source = getattr(trainer, "model", None)
+    if params_source is None:
+        params_source = getattr(model, "model", None)
+    if params_source is not None:
         try:
-            total_params = int(sum(p.numel() for p in model_module.parameters()))
-            trainable_params = int(sum(p.numel() for p in model_module.parameters() if p.requires_grad))
+            total_params = int(sum(p.numel() for p in params_source.parameters()))
+            trainable_params = int(sum(p.numel() for p in params_source.parameters() if p.requires_grad))
         except Exception:
             total_params = None
             trainable_params = None
@@ -830,6 +976,7 @@ def main() -> None:
         "mlflow_enabled": mlflow_enabled,
         "mlflow_experiment": args.mlflow_experiment,
         "mlflow_tracking_uri": tracking_uri,
+        "mlflow_param_count": len(mlflow_params),
         "optimizer_requested": str(args.optimizer),
         "optimizer_resolved": resolved_optimizer,
         "optimizer_lr": float(resolved_lr) if resolved_lr is not None else None,
@@ -885,10 +1032,29 @@ def main() -> None:
         data_yaml=data_yaml,
         imgsz=args.imgsz,
     )
+    infer_config_payload = build_inference_config_payload(
+        train_name=actual_run_name,
+        best_ckpt_path=best_ckpt_path,
+        data_yaml=data_yaml,
+        imgsz=args.imgsz,
+    )
     metrics_payload["resolved_config_path"] = to_project_relative(resolved_config_path)
     metrics_payload["infer_config_path"] = to_project_relative(infer_config_path)
     metrics_path.write_text(json.dumps(metrics_payload, indent=2), encoding="utf-8")
     if mlflow_enabled:
+        mlflow_artifact_dir = train_save_dir / ".mlflow_artifacts"
+        resolved_train_artifact = prepare_mlflow_artifact_alias(
+            resolved_config_path,
+            mlflow_artifact_dir / "train_config.yaml",
+        )
+        resolved_inference_artifact = prepare_mlflow_artifact_alias(
+            infer_config_path,
+            mlflow_artifact_dir / "inference_config.yaml",
+        )
+        metrics_artifact = prepare_mlflow_artifact_alias(
+            metrics_path,
+            mlflow_artifact_dir / "metrics.json",
+        )
         mlflow_module.log_metrics(
             {
                 "mAP50": float(map50),
@@ -899,15 +1065,16 @@ def main() -> None:
                 "recall": float(recall),
             }
         )
+        mlflow_module.log_params(flatten_mlflow_params({"infer": infer_config_payload}))
         safe_log_artifact(mlflow_module, Path(best_ckpt_path), artifact_path="model")
-        safe_log_artifact(mlflow_module, resolved_config_path, artifact_path="config")
-        safe_log_artifact(mlflow_module, metrics_path, artifact_path="metrics")
-        safe_log_artifact(mlflow_module, infer_config_path, artifact_path="config")
+        safe_log_artifact(mlflow_module, resolved_train_artifact, artifact_path="config")
+        safe_log_artifact(mlflow_module, metrics_artifact, artifact_path="metrics")
+        safe_log_artifact(mlflow_module, resolved_inference_artifact, artifact_path="config")
         mlflow_module.set_tag("best_ckpt_path", to_project_relative(best_ckpt_path))
         mlflow_module.set_tag("resolved_config_path", to_project_relative(resolved_config_path))
         mlflow_module.set_tag("metrics_path", to_project_relative(metrics_path))
         mlflow_module.set_tag("infer_config_path", to_project_relative(infer_config_path))
-        mlflow_run.end()
+        mlflow_module.end_run(status="FINISHED")
 
     print("\n" + "=" * 60)
     print(f"      EXPERIMENT REPORT: {args.name}")
