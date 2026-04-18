@@ -354,6 +354,47 @@ def build_parser(defaults: dict) -> argparse.ArgumentParser:
         default=defaults.get("mlflow_experiment", "pill_detection_v2_train"),
         help="MLflow experiment name",
     )
+    default_registered_model_name = (
+        defaults.get("mlflow_registered_model_name")
+        or os.getenv("MLFLOW_REGISTERED_MODEL_NAME")
+        or "pill_detection_v2_yolo"
+    )
+    parser.add_argument(
+        "--mlflow-registered-model-name",
+        type=str,
+        default=default_registered_model_name,
+        help="MLflow registered model name for alias automation",
+    )
+    parser.add_argument(
+        "--mlflow-staging-alias",
+        type=str,
+        default=defaults.get("mlflow_staging_alias", "staging"),
+        help="Alias name for staging candidate",
+    )
+    parser.add_argument(
+        "--mlflow-production-alias",
+        type=str,
+        default=defaults.get("mlflow_production_alias", "production"),
+        help="Alias name for production serving target",
+    )
+    parser.add_argument(
+        "--mlflow-set-staging-alias",
+        type=parse_bool,
+        default=bool(defaults.get("mlflow_set_staging_alias", True)),
+        help="set staging alias to current model version after registration",
+    )
+    parser.add_argument(
+        "--mlflow-set-production-alias",
+        type=parse_bool,
+        default=bool(defaults.get("mlflow_set_production_alias", True)),
+        help="set production alias to current model version after registration",
+    )
+    parser.add_argument(
+        "--mlflow-registry-strict",
+        type=parse_bool,
+        default=bool(defaults.get("mlflow_registry_strict", False)),
+        help="fail training when registry registration/alias update fails",
+    )
 
     return parser
 
@@ -426,6 +467,12 @@ def parse_args() -> argparse.Namespace:
             "enable_mlflow",
             "mlflow_tracking_uri",
             "mlflow_experiment",
+            "mlflow_registered_model_name",
+            "mlflow_staging_alias",
+            "mlflow_production_alias",
+            "mlflow_set_staging_alias",
+            "mlflow_set_production_alias",
+            "mlflow_registry_strict",
             "paths",
         }
         unknown_keys = sorted(set(defaults.keys()) - allowed_keys)
@@ -578,7 +625,7 @@ def build_mlflow_context(args: argparse.Namespace) -> tuple[object | None, bool,
     except ImportError as exc:
         raise RuntimeError(
             "MLflow logging is enabled but `mlflow` is not installed. "
-            "Install it from requirements.txt or run with `--disable-mlflow`."
+            "Install it from requirements-experiment.txt or run with `--disable-mlflow`."
         ) from exc
 
     if tracking_uri:
@@ -600,6 +647,78 @@ def prepare_mlflow_artifact_alias(source_path: Path, alias_path: Path) -> Path:
     alias_path.parent.mkdir(parents=True, exist_ok=True)
     alias_path.write_bytes(source_path.read_bytes())
     return alias_path
+
+
+def safe_get_registry_alias_version(client: object, model_name: str, alias_name: str) -> str | None:
+    try:
+        model_version = client.get_model_version_by_alias(model_name, alias_name)
+    except Exception:
+        return None
+    version = getattr(model_version, "version", None)
+    if version is None:
+        return None
+    return str(version)
+
+
+def register_and_update_model_aliases(
+    mlflow_module: object,
+    run_id: str,
+    best_ckpt_path: str,
+    registered_model_name: str,
+    staging_alias: str,
+    production_alias: str,
+    set_staging_alias: bool,
+    set_production_alias: bool,
+) -> dict[str, str | bool | None]:
+    if not registered_model_name:
+        raise ValueError("registered model name is empty")
+
+    model_artifact_name = Path(best_ckpt_path).name
+    model_uri = f"runs:/{run_id}/model/{model_artifact_name}"
+    registration = mlflow_module.register_model(model_uri=model_uri, name=registered_model_name)
+    registered_version = str(getattr(registration, "version", ""))
+    if not registered_version:
+        raise RuntimeError("registered model version is missing")
+
+    from mlflow.tracking import MlflowClient
+
+    client = MlflowClient()
+    previous_production_version = None
+    if set_production_alias:
+        previous_production_version = safe_get_registry_alias_version(
+            client=client,
+            model_name=registered_model_name,
+            alias_name=production_alias,
+        )
+
+    if set_staging_alias:
+        client.set_registered_model_alias(registered_model_name, staging_alias, registered_version)
+
+    if set_production_alias:
+        client.set_registered_model_alias(registered_model_name, production_alias, registered_version)
+        if previous_production_version and previous_production_version != registered_version:
+            client.set_model_version_tag(registered_model_name, previous_production_version, "status", "archived")
+            client.set_model_version_tag(
+                registered_model_name,
+                previous_production_version,
+                "archived_at_utc",
+                datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            )
+        for key in ("status", "archived_at_utc"):
+            try:
+                client.delete_model_version_tag(registered_model_name, registered_version, key)
+            except Exception:
+                pass
+
+    return {
+        "model_name": registered_model_name,
+        "model_version": registered_version,
+        "staging_alias": staging_alias if set_staging_alias else None,
+        "production_alias": production_alias if set_production_alias else None,
+        "previous_production_version": previous_production_version,
+        "set_staging_alias": set_staging_alias,
+        "set_production_alias": set_production_alias,
+    }
 
 
 def disable_ultralytics_mlflow_callbacks(model: YOLO) -> None:
@@ -766,6 +885,7 @@ def main() -> None:
     mlflow_module, mlflow_enabled, tracking_uri = build_mlflow_context(args)
     mlflow_run = None
     mlflow_run_id = None
+    registry_result: dict[str, str | bool | None] | None = None
     mlflow_params = build_resolved_mlflow_params(
         args=args,
         resolved_paths=resolved_paths,
@@ -1074,6 +1194,42 @@ def main() -> None:
         # YOLO 시각화 결과물(results.png, confusion_matrix 등) 전수 업로드
         if results is not None and hasattr(results, 'save_dir') and os.path.exists(results.save_dir):
             mlflow_module.log_artifacts(results.save_dir, artifact_path="plots")
+
+        if mlflow_run_id is not None:
+            try:
+                registry_result = register_and_update_model_aliases(
+                    mlflow_module=mlflow_module,
+                    run_id=mlflow_run_id,
+                    best_ckpt_path=best_ckpt_path,
+                    registered_model_name=args.mlflow_registered_model_name,
+                    staging_alias=args.mlflow_staging_alias,
+                    production_alias=args.mlflow_production_alias,
+                    set_staging_alias=args.mlflow_set_staging_alias,
+                    set_production_alias=args.mlflow_set_production_alias,
+                )
+                mlflow_module.set_tags(
+                    {
+                        "registry_update_status": "SUCCESS",
+                        "registered_model_name": str(registry_result["model_name"]),
+                        "registered_model_version": str(registry_result["model_version"]),
+                        "registry_staging_alias": str(registry_result["staging_alias"] or "none"),
+                        "registry_production_alias": str(registry_result["production_alias"] or "none"),
+                    }
+                )
+                metrics_payload["registered_model_name"] = registry_result["model_name"]
+                metrics_payload["registered_model_version"] = registry_result["model_version"]
+                metrics_payload["registry_staging_alias"] = registry_result["staging_alias"]
+                metrics_payload["registry_production_alias"] = registry_result["production_alias"]
+                metrics_path.write_text(json.dumps(metrics_payload, indent=2), encoding="utf-8")
+            except Exception as exc:
+                error_text = str(exc)
+                mlflow_module.set_tag("registry_update_status", "FAILED")
+                mlflow_module.set_tag("registry_update_error", error_text[:250])
+                if args.mlflow_registry_strict:
+                    mlflow_module.end_run(status="FAILED")
+                    raise
+                print(f"[WARN] MLflow registry update skipped: {exc}")
+
         mlflow_module.set_tag("best_ckpt_path", to_project_relative(best_ckpt_path))
         mlflow_module.set_tag("resolved_config_path", to_project_relative(resolved_config_path))
         mlflow_module.set_tag("metrics_path", to_project_relative(metrics_path))
@@ -1106,6 +1262,16 @@ def main() -> None:
     print(f" ➡️  config:    {resolved_config_path}")
     if mlflow_run_id is not None:
         print(f" ➡️  mlflow id: {mlflow_run_id}")
+    if registry_result is not None:
+        print(
+            " ➡️  registry: "
+            f"{registry_result['model_name']} v{registry_result['model_version']}"
+        )
+        print(
+            " ➡️  aliases:  "
+            f"staging={registry_result['staging_alias'] or 'none'}, "
+            f"production={registry_result['production_alias'] or 'none'}"
+        )
     print(f" ➡️  run dir:   {train_save_dir}")
     print(f" ➡️  infer cfg: {infer_config_path}")
     print("=" * 60 + "\n")
