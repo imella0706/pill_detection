@@ -4,7 +4,7 @@
 # Blue-Green Deployment Orchestrator (MVP Stage A)
 # =========================================================
 # 이 스크립트는 Nginx 설정 파일을 분석해 현재 띄워진 포트(Blue)를 찾고,
-# 반대편 포트(Green)에 새 Uvicorn 워커를 띄운 뒤, 헬스체크를 통과하면
+# 반대편 포트(Green)에 새 Gunicorn(ASGI worker) 워커를 띄운 뒤, 헬스체크를 통과하면
 # Nginx 방향을 틀어버리는 "Zero-Downtime(무중단)" 스위칭 스크립트다.
 
 echo "[INFO] Starting Blue-Green Deployment..."
@@ -28,10 +28,22 @@ fi
 echo "[CHECK] Current Active Port (Blue): $OLD_PORT"
 echo "[INIT] Spawning New Worker (Green) on Port: $NEW_PORT"
 
-# 2. 새로운 Uvicorn(FastAPI) 워커 기동 (백그라운드)
-# 환경 변수에 모델 경로를 넣어줄 수 있다.
-# conda 환경을 명시적으로 사용할 경우: conda run -n codeit uvicorn ...
-conda run -n codeit uvicorn src.api.main:app --host 0.0.0.0 --port $NEW_PORT &
+# Gunicorn runtime defaults (override 가능)
+GUNICORN_WORKERS="${GUNICORN_WORKERS:-1}"
+GUNICORN_TIMEOUT="${GUNICORN_TIMEOUT:-120}"
+GUNICORN_GRACEFUL_TIMEOUT="${GUNICORN_GRACEFUL_TIMEOUT:-30}"
+GUNICORN_KEEPALIVE="${GUNICORN_KEEPALIVE:-5}"
+APP_MODULE="src.api.main:app"
+
+# 2. 새로운 Gunicorn(FastAPI ASGI worker) 기동 (백그라운드)
+# 핵심: FastAPI는 ASGI이므로 sync worker가 아닌 UvicornWorker를 강제한다.
+conda run -n codeit gunicorn "$APP_MODULE" \
+    -k uvicorn.workers.UvicornWorker \
+    --bind "0.0.0.0:$NEW_PORT" \
+    --workers "$GUNICORN_WORKERS" \
+    --timeout "$GUNICORN_TIMEOUT" \
+    --graceful-timeout "$GUNICORN_GRACEFUL_TIMEOUT" \
+    --keep-alive "$GUNICORN_KEEPALIVE" &
 NEW_PID=$!
 
 echo "[WAIT] Waiting for Green Worker (PID: $NEW_PID) to warm up and load the YOLO model..."
