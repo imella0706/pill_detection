@@ -1,0 +1,18 @@
+# Reproducible experiment stack (training/inference/evaluation + MLflow)
+# Use this for team onboarding and experiment reruns.
+
+-r requirements-runtime.txt
+
+numpy==2.4.3
+pandas==2.3.3
+opencv-python==4.13.0.92
+scikit-learn==1.8.0
+scipy==1.17.1
+matplotlib==3.10.8
+seaborn==0.13.2
+PyYAML==6.0.3
+tqdm==4.67.1
+ensemble-boxes==1.0.9
+mlflow==2.22.4
+python-dotenv==1.2.2
+wandb==0.25.1
