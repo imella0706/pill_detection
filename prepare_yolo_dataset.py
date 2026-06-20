@@ -38,7 +38,13 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--dataset-family", type=str, default=None)
     parser.add_argument("--dataset-variant-id", type=str, default=None)
-    parser.add_argument("--clean-output", type=int, choices=[0, 1], default=None)
+    parser.add_argument(
+        "--no-clean-output",
+        dest="clean_output",
+        action="store_false",
+        default=None,
+        help="keep existing YOLO output files instead of rebuilding output directories",
+    )
     parser.add_argument("--data-seed", type=int, default=None)
     parser.add_argument("--copy-paste-target-count", type=int, default=None)
     return parser.parse_args()

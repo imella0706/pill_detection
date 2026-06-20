@@ -351,19 +351,25 @@ def build_parser(defaults: dict) -> argparse.ArgumentParser:
     parser.add_argument(
         "--mlflow-experiment",
         type=str,
-        default=defaults.get("mlflow_experiment", "pill_detection_v2_train"),
+        default=defaults.get("mlflow_experiment", "pill_detection_train"),
         help="MLflow experiment name",
     )
     default_registered_model_name = (
         defaults.get("mlflow_registered_model_name")
         or os.getenv("MLFLOW_REGISTERED_MODEL_NAME")
-        or "pill_detection_v2_yolo"
+        or "pill_detection_yolo"
     )
     parser.add_argument(
         "--mlflow-registered-model-name",
         type=str,
         default=default_registered_model_name,
-        help="MLflow registered model name for alias automation",
+        help="MLflow registered model name for registry operations",
+    )
+    parser.add_argument(
+        "--mlflow-register-model",
+        type=parse_bool,
+        default=bool(defaults.get("mlflow_register_model", False)),
+        help="register current run artifact(runs:/<run_id>/model) into Model Registry",
     )
     parser.add_argument(
         "--mlflow-staging-alias",
@@ -386,7 +392,7 @@ def build_parser(defaults: dict) -> argparse.ArgumentParser:
     parser.add_argument(
         "--mlflow-set-production-alias",
         type=parse_bool,
-        default=bool(defaults.get("mlflow_set_production_alias", True)),
+        default=bool(defaults.get("mlflow_set_production_alias", False)),
         help="set production alias to current model version after registration",
     )
     parser.add_argument(
@@ -468,6 +474,7 @@ def parse_args() -> argparse.Namespace:
             "mlflow_tracking_uri",
             "mlflow_experiment",
             "mlflow_registered_model_name",
+            "mlflow_register_model",
             "mlflow_staging_alias",
             "mlflow_production_alias",
             "mlflow_set_staging_alias",
@@ -649,6 +656,26 @@ def prepare_mlflow_artifact_alias(source_path: Path, alias_path: Path) -> Path:
     return alias_path
 
 
+def log_mlflow_pyfunc_yolo_model(mlflow_module: object, best_ckpt_path: str) -> None:
+    """
+    Log a YOLO checkpoint as an MLflow pyfunc model package.
+    This creates an artifact directory containing MLmodel metadata so
+    MLflow UI can register it directly from Artifacts.
+    """
+    ckpt_path = Path(best_ckpt_path)
+    if not ckpt_path.exists():
+        raise FileNotFoundError(f"best checkpoint not found: {best_ckpt_path}")
+
+    yolo = YOLO(str(ckpt_path))
+    torch_model = yolo.model
+
+    mlflow_module.pytorch.log_model(
+        pytorch_model=torch_model,
+        artifact_path="model",
+        registered_model_name=None,
+    )
+
+
 def safe_get_registry_alias_version(client: object, model_name: str, alias_name: str) -> str | None:
     try:
         model_version = client.get_model_version_by_alias(model_name, alias_name)
@@ -673,8 +700,8 @@ def register_and_update_model_aliases(
     if not registered_model_name:
         raise ValueError("registered model name is empty")
 
-    model_artifact_name = Path(best_ckpt_path).name
-    model_uri = f"runs:/{run_id}/model/{model_artifact_name}"
+    # 모델(가중치)이 담긴 폴더 자체를 모델로 등록해야 Mlflow UI에서 인식 가능
+    model_uri = f"runs:/{run_id}/model"
     registration = mlflow_module.register_model(model_uri=model_uri, name=registered_model_name)
     registered_version = str(getattr(registration, "version", ""))
     if not registered_version:
@@ -905,7 +932,7 @@ def main() -> None:
         mlflow_module.set_tags(
             {
                 "mlflow.user": user_id,
-                "project": "pill_detection_v2",
+                "project": "pill_detection",
                 "run_type": "train",
                 "device": device,
                 "tracking_uri": tracking_uri or "local_default",
@@ -1186,7 +1213,17 @@ def main() -> None:
             }
         )
         mlflow_module.log_params(flatten_mlflow_params({"infer": infer_config_payload}))
-        safe_log_artifact(mlflow_module, Path(best_ckpt_path), artifact_path="model")
+        mlflow_model_logged = False
+        try:
+            log_mlflow_pyfunc_yolo_model(mlflow_module, best_ckpt_path)
+            mlflow_model_logged = True
+            mlflow_module.set_tag("model_artifact_format", "mlflow_pyfunc")
+        except Exception as exc:
+            mlflow_module.set_tag("model_artifact_format", "checkpoint_only")
+            mlflow_module.set_tag("model_package_log_error", str(exc)[:250])
+            print(f"[WARN] Failed to log MLflow model package. fallback=checkpoint_only ({exc})")
+
+        safe_log_artifact(mlflow_module, Path(best_ckpt_path), artifact_path="model_raw")
         safe_log_artifact(mlflow_module, resolved_train_artifact, artifact_path="config")
         safe_log_artifact(mlflow_module, metrics_artifact, artifact_path="metrics")
         safe_log_artifact(mlflow_module, resolved_inference_artifact, artifact_path="config")
@@ -1195,7 +1232,7 @@ def main() -> None:
         if results is not None and hasattr(results, 'save_dir') and os.path.exists(results.save_dir):
             mlflow_module.log_artifacts(results.save_dir, artifact_path="plots")
 
-        if mlflow_run_id is not None:
+        if mlflow_run_id is not None and args.mlflow_register_model:
             try:
                 registry_result = register_and_update_model_aliases(
                     mlflow_module=mlflow_module,
@@ -1229,6 +1266,11 @@ def main() -> None:
                     mlflow_module.end_run(status="FAILED")
                     raise
                 print(f"[WARN] MLflow registry update skipped: {exc}")
+        elif mlflow_run_id is not None:
+            mlflow_module.set_tag("registry_update_status", "SKIPPED")
+            mlflow_module.set_tag("registry_update_reason", "mlflow_register_model=false")
+            if not mlflow_model_logged:
+                mlflow_module.set_tag("registry_update_note", "model artifact package missing; register may fail")
 
         mlflow_module.set_tag("best_ckpt_path", to_project_relative(best_ckpt_path))
         mlflow_module.set_tag("resolved_config_path", to_project_relative(resolved_config_path))
