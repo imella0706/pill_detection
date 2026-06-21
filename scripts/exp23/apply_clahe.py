@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import argparse
+import json
 import shutil
+from datetime import datetime, timezone
 from pathlib import Path
 
 import cv2
@@ -28,6 +30,28 @@ def load_base_dataset_yaml(base_data_dir: Path) -> dict:
         raise FileNotFoundError(f"dataset.yaml not found: {dataset_yaml}")
     with dataset_yaml.open("r", encoding="utf-8") as f:
         return yaml.safe_load(f) or {}
+
+
+def infer_dataset_identity(dataset_dir: Path) -> tuple[str | None, str | None]:
+    variant_id = dataset_dir.name if dataset_dir.name else None
+    dataset_family = dataset_dir.parent.name if dataset_dir.parent != dataset_dir else None
+    return dataset_family, variant_id
+
+
+def load_base_manifest(base_data_dir: Path, processed_root: Path) -> dict:
+    dataset_family, variant_id = infer_dataset_identity(base_data_dir)
+    if dataset_family is None or variant_id is None:
+        return {}
+
+    manifest_path = processed_root / "offline" / dataset_family / variant_id / "manifest.json"
+    if not manifest_path.exists():
+        return {}
+
+    with manifest_path.open("r", encoding="utf-8") as f:
+        payload = json.load(f)
+    if not isinstance(payload, dict):
+        return {}
+    return payload
 
 
 def collect_images(images_dir: Path) -> list[Path]:
@@ -83,6 +107,55 @@ def write_dataset_yaml(base_meta: dict, output_root: Path) -> Path:
     return output_yaml_path
 
 
+def write_clahe_manifest(
+    *,
+    output_root: Path,
+    processed_root: Path,
+    base_data_dir: Path,
+    base_manifest: dict,
+    clip_limit: float,
+    tile_grid_size: tuple[int, int],
+    total_images: int,
+    total_labels: int,
+    dataset_yaml_path: Path,
+) -> Path:
+    dataset_family, base_variant_id = infer_dataset_identity(base_data_dir)
+    variant_id = output_root.name
+    base_data_version = base_manifest.get("data_version")
+    data_version = f"{base_data_version}_{variant_id}" if base_data_version else variant_id
+
+    manifest = {
+        "variant_id": variant_id,
+        "data_version": data_version,
+        "dataset_hash": base_manifest.get("dataset_hash"),
+        "base_dataset_family": dataset_family,
+        "base_variant_id": base_variant_id,
+        "base_data_version": base_data_version,
+        "base_dataset_dir": str(base_data_dir),
+        "input_images_dir": base_manifest.get("input_images_dir"),
+        "input_annotations_dir": base_manifest.get("input_annotations_dir"),
+        "input_paths": base_manifest.get("input_paths") or {},
+        "augmentation": "clahe",
+        "clip_limit": clip_limit,
+        "tile_grid_size": list(tile_grid_size),
+        "materialized_yolo_dataset": str(dataset_yaml_path),
+        "raw_train_image_hash": base_manifest.get("raw_train_image_hash"),
+        "raw_train_image_version": base_manifest.get("raw_train_image_version"),
+        "raw_train_image_file_count": base_manifest.get("raw_train_image_file_count"),
+        "raw_train_image_total_bytes": base_manifest.get("raw_train_image_total_bytes"),
+        "annotation_file_count": base_manifest.get("annotation_file_count"),
+        "images_processed": total_images,
+        "labels_copied": total_labels,
+        "created_at_utc": datetime.now(timezone.utc).isoformat(),
+    }
+
+    manifest_path = processed_root / "offline" / "clahe" / variant_id / "manifest.json"
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    with manifest_path.open("w", encoding="utf-8") as f:
+        json.dump(manifest, f, ensure_ascii=False, indent=2)
+    return manifest_path
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Build CLAHE-processed YOLO dataset clone")
     parser.add_argument(
@@ -96,6 +169,12 @@ def main() -> None:
         type=Path,
         default=Path("data/datasets/yolo/clahe/cl20_data_seed42"),
         help="Output root for CLAHE dataset clone",
+    )
+    parser.add_argument(
+        "--processed-root",
+        type=Path,
+        default=Path("data/processed"),
+        help="Processed data root containing offline manifests",
     )
     parser.add_argument(
         "--clip-limit",
@@ -126,6 +205,7 @@ def main() -> None:
 
     base_data_dir = args.base_data_dir.resolve()
     output_root = args.output_root.resolve()
+    processed_root = args.processed_root.resolve()
     tile_grid_size = parse_tile_grid_size(args.tile_grid_size)
 
     if args.overwrite and output_root.exists():
@@ -137,6 +217,7 @@ def main() -> None:
         )
 
     base_meta = load_base_dataset_yaml(base_data_dir)
+    base_manifest = load_base_manifest(base_data_dir=base_data_dir, processed_root=processed_root)
 
     total_images = 0
     total_labels = 0
@@ -163,9 +244,21 @@ def main() -> None:
         )
 
     dataset_yaml_path = write_dataset_yaml(base_meta=base_meta, output_root=output_root)
+    manifest_path = write_clahe_manifest(
+        output_root=output_root,
+        processed_root=processed_root,
+        base_data_dir=base_data_dir,
+        base_manifest=base_manifest,
+        clip_limit=args.clip_limit,
+        tile_grid_size=tile_grid_size,
+        total_images=total_images,
+        total_labels=total_labels,
+        dataset_yaml_path=dataset_yaml_path,
+    )
     print("CLAHE dataset created")
     print(f"- output_root: {output_root}")
     print(f"- dataset_yaml: {dataset_yaml_path}")
+    print(f"- manifest: {manifest_path}")
     print(f"- overwrite: {args.overwrite}")
     print(f"- clip_limit: {args.clip_limit}")
     print(f"- tile_grid_size: {tile_grid_size}")

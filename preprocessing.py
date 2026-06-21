@@ -53,10 +53,30 @@ def compute_annotation_dataset_hash(annotation_files: list[Path], annotation_roo
     return md5.hexdigest()
 
 
+def compute_file_collection_hash(files: list[Path], root: Path) -> str:
+    md5 = hashlib.md5()
+    for file_path in sorted(files):
+        relative_path = file_path.relative_to(root).as_posix()
+        file_md5 = hashlib.md5(file_path.read_bytes()).hexdigest()
+        md5.update(relative_path.encode("utf-8"))
+        md5.update(b"\n")
+        md5.update(str(file_path.stat().st_size).encode("ascii"))
+        md5.update(b"\n")
+        md5.update(file_md5.encode("ascii"))
+        md5.update(b"\n")
+    return md5.hexdigest()
+
+
 def build_data_version(annotation_files: list[Path], annotation_root: Path, variant_id: str) -> tuple[str, str]:
     dataset_hash = compute_annotation_dataset_hash(annotation_files, annotation_root)
     data_version = f"{dataset_hash[:8]}_{variant_id}"
     return dataset_hash, data_version
+
+
+def build_raw_image_version(image_files: list[Path], image_root: Path) -> tuple[str, str]:
+    raw_image_hash = compute_file_collection_hash(image_files, image_root)
+    raw_image_version = f"raw_{raw_image_hash[:8]}"
+    return raw_image_hash, raw_image_version
 
 
 def get_image_size_from_annotation(image_info: dict[str, Any]) -> tuple[int | None, int | None]:
@@ -204,6 +224,10 @@ def resolve_runtime_settings(args: argparse.Namespace, config: dict[str, Any]) -
 # =========================
 def load_raw_annotation_files(ann_dir: Path) -> list[Path]:
     return sorted(ann_dir.glob("**/*.json"))
+
+
+def load_raw_image_files(image_dir: Path) -> list[Path]:
+    return sorted(path for path in image_dir.glob("**/*") if path.is_file())
 
 
 # =========================
@@ -692,9 +716,17 @@ def main() -> None:
         annotation_root=runtime["train_ann_dir"],
         variant_id=runtime["copy_paste_variant_id"],
     )
+    raw_train_image_files = load_raw_image_files(runtime["train_img_dir"])
+    raw_train_image_hash, raw_train_image_version = build_raw_image_version(
+        image_files=raw_train_image_files,
+        image_root=runtime["train_img_dir"],
+    )
     print(f"[1] Loaded annotation json files: {len(ann_files)}")
     print(f"    - dataset_hash             : {dataset_hash}")
     print(f"    - data_version             : {data_version}")
+    print(f"    - raw_train_image_hash     : {raw_train_image_hash}")
+    print(f"    - raw_train_image_version  : {raw_train_image_version}")
+    print(f"    - raw_train_image_count    : {len(raw_train_image_files)}")
 
     merged = merge_annotations_by_image(ann_files)
     print(f"[2] Merged into image-level annotations: {len(merged)} images")
@@ -775,6 +807,8 @@ def main() -> None:
         "variant_id": runtime["copy_paste_variant_id"],
         "data_version": data_version,
         "dataset_hash": dataset_hash,
+        "raw_train_image_hash": raw_train_image_hash,
+        "raw_train_image_version": raw_train_image_version,
         "augmentation": "copy_paste",
         "data_seed": runtime["data_seed"],
         "target_count_per_rare_class": runtime["copy_paste_target_count"],
@@ -787,6 +821,8 @@ def main() -> None:
             "annotation_source_dir": str(runtime["train_ann_dir"]),
         },
         "annotation_file_count": len(ann_files),
+        "raw_train_image_file_count": len(raw_train_image_files),
+        "raw_train_image_total_bytes": sum(path.stat().st_size for path in raw_train_image_files),
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
     }
 

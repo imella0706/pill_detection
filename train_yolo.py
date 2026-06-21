@@ -906,6 +906,7 @@ def main() -> None:
     if data_lineage.get("manifest_path"):
         print(f"Data manifest: {data_lineage['manifest_path']}")
         print(f"Data version : {data_lineage.get('data_version')}")
+        print(f"Raw images   : {data_lineage.get('raw_train_image_version')}")
     else:
         print("Data manifest: not found (training continues without data_version linkage)")
 
@@ -940,6 +941,8 @@ def main() -> None:
                 "variant_id": str(data_lineage.get("variant_id") or "unknown"),
                 "data_version": str(data_lineage.get("data_version") or "unknown"),
                 "dataset_hash": str(data_lineage.get("dataset_hash") or "unknown"),
+                "raw_train_image_version": str(data_lineage.get("raw_train_image_version") or "unknown"),
+                "raw_train_image_hash": str(data_lineage.get("raw_train_image_hash") or "unknown"),
             }
         )
         print(f"MLflow run id: {mlflow_run_id}")
@@ -1144,6 +1147,10 @@ def main() -> None:
         "manifest_path": data_lineage.get("manifest_path"),
         "data_version": data_lineage.get("data_version"),
         "dataset_hash": data_lineage.get("dataset_hash"),
+        "raw_train_image_version": data_lineage.get("raw_train_image_version"),
+        "raw_train_image_hash": data_lineage.get("raw_train_image_hash"),
+        "raw_train_image_file_count": data_lineage.get("raw_train_image_file_count"),
+        "raw_train_image_total_bytes": data_lineage.get("raw_train_image_total_bytes"),
         "annotation_source_dir": data_lineage.get("annotation_source_dir"),
         "model_path": args.model,
         "model_name": infer_model_name(args.model),

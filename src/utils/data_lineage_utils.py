@@ -51,6 +51,10 @@ def load_data_lineage(project_root: Path, processed_root: str | Path, data_yaml:
         "manifest_path": str(manifest_path) if manifest_path else None,
         "data_version": None,
         "dataset_hash": None,
+        "raw_train_image_hash": None,
+        "raw_train_image_version": None,
+        "raw_train_image_file_count": None,
+        "raw_train_image_total_bytes": None,
         "input_paths": {},
         "annotation_source_dir": None,
     }
@@ -66,6 +70,10 @@ def load_data_lineage(project_root: Path, processed_root: str | Path, data_yaml:
         {
             "data_version": payload.get("data_version"),
             "dataset_hash": payload.get("dataset_hash"),
+            "raw_train_image_hash": payload.get("raw_train_image_hash"),
+            "raw_train_image_version": payload.get("raw_train_image_version"),
+            "raw_train_image_file_count": payload.get("raw_train_image_file_count"),
+            "raw_train_image_total_bytes": payload.get("raw_train_image_total_bytes"),
             "input_paths": input_paths,
             "annotation_source_dir": input_paths.get("annotation_source_dir")
             or payload.get("input_annotations_dir"),
