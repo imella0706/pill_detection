@@ -182,41 +182,44 @@ flowchart TD
 
 ## 데이터 전처리
 
-기본 설정으로 전처리:
+- 기본 설정으로 전처리
 
-```bash
-conda run -n pill_detection python preprocessing.py
-```
+  ```bash
+  conda run -n pill_detection python preprocessing.py
+  ```
 
-특정 학습 YAML 기준으로 전처리:
+- 특정 학습 YAML 기준으로 전처리
 
-```bash
-conda run -n pill_detection python preprocessing.py --config configs/train/exp15_train_baseline_yolo11s_2.0.yaml
-```
+  ```bash
+  conda run -n pill_detection python preprocessing.py \
+    --config configs/train/exp15_train_baseline_yolo11s_2.0.yaml
+  ```
 
-YOLO 데이터셋 생성:
+- YOLO 데이터셋 생성
 
-```bash
-conda run -n pill_detection python prepare_yolo_dataset.py --config configs/train/exp15_train_baseline_yolo11s_2.0.yaml
-```
+  ```bash
+  conda run -n pill_detection python prepare_yolo_dataset.py \
+    --config configs/train/exp15_train_baseline_yolo11s_2.0.yaml
+  ```
 
 ## 학습
 
-Exp15 기준 학습:
+- Exp15 기준 학습
 
-```bash
-conda run -n pill_detection python train_yolo.py --config configs/train/exp15_train_baseline_yolo11s_2.0.yaml
-```
+  ```bash
+  conda run -n pill_detection python train_yolo.py \
+    --config configs/train/exp15_train_baseline_yolo11s_2.0.yaml
+  ```
 
-커스텀 데이터셋으로 학습:
+- 커스텀 데이터셋으로 학습
 
-```bash
-conda run -n pill_detection python train_yolo.py \
-  --config configs/train/exp15_train_baseline_yolo11s_2.0.yaml \
-  --data path/to/dataset.yaml
-```
+  ```bash
+  conda run -n pill_detection python train_yolo.py \
+    --config configs/train/exp15_train_baseline_yolo11s_2.0.yaml \
+    --data path/to/dataset.yaml
+  ```
 
-학습 산출물은 기본적으로 `runs/<experiment_name>/` 아래에 생성됩니다. 핵심 파일은 `weights/best.pt`입니다.
+- 학습 산출물은 기본적으로 `runs/<experiment_name>/` 아래에 생성됩니다. 핵심 파일은 `weights/best.pt`입니다.
 
 ## 추론
 
@@ -238,113 +241,113 @@ conda run -n pill_detection python src/test_custom.py --config configs/inference
 
 기본 학습/추론 흐름에서는 위의 `train_yolo.py`, `src/test_custom.py` 명령을 사용합니다. 반복 실험이나 앙상블처럼 인자가 길어지는 작업은 `scripts/` 아래 실험별 실행 스크립트로 묶어 관리합니다.
 
-Exp10 3-seed 학습 배치:
+- Exp10 3-seed 학습 배치
 
-```bash
-bash scripts/exp10/run_exp10_batch.sh
-```
+  ```bash
+  bash scripts/exp10/run_exp10_batch.sh
+  ```
 
-Exp10 3-seed WBF 앙상블 및 평가:
+- Exp10 3-seed WBF 앙상블 및 평가
 
-```bash
-bash scripts/exp10/run_exp10_ensemble_final.sh
-```
+  ```bash
+  bash scripts/exp10/run_exp10_ensemble_final.sh
+  ```
 
-Exp9 multi-scale WBF 검증/제출 파이프라인:
+- Exp9 multi-scale WBF 검증/제출 파이프라인
 
-```bash
-bash scripts/exp9/run_exp9_val.sh
-bash scripts/exp9/run_exp9_test.sh
-```
+  ```bash
+  bash scripts/exp9/run_exp9_val.sh
+  bash scripts/exp9/run_exp9_test.sh
+  ```
 
-주의: Exp9/Exp10 스크립트는 과거 실험 재현용입니다. 현재 추론 엔트리포인트인 `src/test_custom.py` 기준으로 정리했지만, 실행 전 가중치 경로와 데이터셋 경로가 로컬 환경에 존재하는지 확인합니다.
+- 주의: Exp9/Exp10 스크립트는 과거 실험 재현용입니다. 현재 추론 엔트리포인트인 `src/test_custom.py` 기준으로 정리했지만, 실행 전 가중치 경로와 데이터셋 경로가 로컬 환경에 존재하는지 확인합니다.
 
-개별 도구의 전체 인자는 `--help`로 확인합니다.
+- 개별 도구의 전체 인자는 `--help`로 확인합니다.
 
-```bash
-conda run -n pill_detection python src/eval_csv_map.py --help
-conda run -n pill_detection python src/exp8_search.py --help
-conda run -n pill_detection python src/ensemble_wbf.py --help
-```
+  ```bash
+  conda run -n pill_detection python src/eval_csv_map.py --help
+  conda run -n pill_detection python src/exp8_search.py --help
+  conda run -n pill_detection python src/ensemble_wbf.py --help
+  ```
 
-실험별 정량 결과와 판단 근거는 [experiments_log.md](experiments_log.md)를 참고합니다.
+- 실험별 정량 결과와 판단 근거는 [experiments_log.md](experiments_log.md)를 참고합니다.
 
 ## API 서빙과 배포
 
-FastAPI 앱 엔트리포인트:
+- FastAPI 앱 엔트리포인트
 
-```text
-src/api/main.py
-```
+  ```text
+  src/api/main.py
+  ```
 
-로컬 API 실행 예시:
+- 로컬 API 실행
 
-```bash
-conda run -n pill_detection gunicorn src.api.main:app \
-  -k uvicorn.workers.UvicornWorker \
-  --bind 0.0.0.0:8000 \
-  --workers 1
-```
+  ```bash
+  conda run -n pill_detection gunicorn src.api.main:app \
+    -k uvicorn.workers.UvicornWorker \
+    --bind 0.0.0.0:8000 \
+    --workers 1
+  ```
 
-헬스체크:
+- 헬스체크
 
-```bash
-curl http://127.0.0.1:8000/health
-```
+  ```bash
+  curl http://127.0.0.1:8000/health
+  ```
 
-이미지 추론:
+- 이미지 추론
 
-```bash
-curl -X POST http://127.0.0.1:8000/predict \
-  -F "file=@path/to/image.png"
-```
+  ```bash
+  curl -X POST http://127.0.0.1:8000/predict \
+    -F "file=@path/to/image.png"
+  ```
 
-Docker 이미지 빌드:
+- Docker 이미지 빌드
 
-```bash
-docker build -t pill-api-image .
-```
+  ```bash
+  docker build -t pill-api-image .
+  ```
 
-Blue-Green 배포:
+- Blue-Green 배포
 
-```bash
-bash scripts/deploy.sh
-```
+  ```bash
+  bash scripts/deploy.sh
+  ```
 
-`deploy.sh`는 현재 Nginx upstream의 blue/green 상태를 확인하고, 새 API 컨테이너를 띄운 뒤 `/health` 통과 시 트래픽을 새 컨테이너로 전환합니다.
+  `deploy.sh`는 현재 Nginx upstream의 blue/green 상태를 확인하고, 새 API 컨테이너를 띄운 뒤 `/health` 통과 시 트래픽을 새 컨테이너로 전환합니다.
 
-API는 기본적으로 `MODEL_URI=models:/pill_detection_2026@production`을 사용합니다. MLflow Registry URI를 런타임에서 직접 해석하려면 `mlflow`가 런타임 의존성에 있어야 합니다.
+- API는 기본적으로 `MODEL_URI=models:/pill_detection_2026@production`을 사용합니다. MLflow Registry URI를 런타임에서 직접 해석하려면 `mlflow`가 런타임 의존성에 있어야 합니다.
 
 ## 실험 관리
 
-실험 추적 기준은 MLflow입니다.
-
+- 실험 추적 기준: MLflow
 - 학습 파라미터, 메트릭, artifact 기록
 - `best.pt`, config, metrics 파일 보존
 - Registry alias 기반 모델 승격
 - `@staging` 검증 후 `@production` 승격
 
-MLflow 서버는 `docker-compose.yaml`에 정의되어 있습니다.
+- MLflow 서버 실행
 
-```bash
-docker compose up -d mlflow
-```
+  ```bash
+  docker compose up -d mlflow
+  ```
 
-Registry 조작:
+- Registry 조작
 
-```bash
-conda run -n pill_detection python scripts/registry_ops.py --help
-```
+  ```bash
+  conda run -n pill_detection python scripts/registry_ops.py --help
+  ```
 
-`registry_ops.py`는 MLflow 모델 버전을 등록하고 `@staging`, `@production` alias를 승격하거나 롤백할 때 사용합니다.
+  `registry_ops.py`는 MLflow 모델 버전을 등록하고 `@staging`, `@production` alias를 승격하거나 롤백할 때 사용합니다.
 
-staging 검증과 release:
+- Staging 검증과 release
 
-```bash
-bash scripts/staging_validate_and_release.sh --help
-```
+  ```bash
+  bash scripts/staging_validate_and_release.sh --help
+  ```
 
-`staging_validate_and_release.sh`는 새 MLflow run을 후보 모델로 등록한 뒤 `@staging` 컨테이너를 임시로 띄워 `/health`를 검증합니다. 통과한 모델만 옵션에 따라 `@production`으로 승격하고 배포합니다.
+  `staging_validate_and_release.sh`는 새 MLflow run을 후보 모델로 등록한 뒤 `@staging` 컨테이너를 임시로 띄워 `/health`를 검증합니다. 통과한 모델만 옵션에 따라 `@production`으로 승격하고 배포합니다.
 
-`resolve_registry_model_path.py`는 `models:/pill_detection_2026@production` 같은 Registry URI를 실제 YOLO `.pt` 파일 경로로 변환합니다. 컨테이너가 Registry alias가 아니라 확정된 체크포인트 파일을 로드하게 만들기 위한 보조 스크립트입니다.
+- Registry URI 해석
 
+  `resolve_registry_model_path.py`는 `models:/pill_detection_2026@production` 같은 Registry URI를 실제 YOLO `.pt` 파일 경로로 변환합니다. 컨테이너가 Registry alias가 아니라 확정된 체크포인트 파일을 로드하게 만들기 위한 보조 스크립트입니다.
