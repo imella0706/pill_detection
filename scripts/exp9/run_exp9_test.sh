@@ -15,15 +15,15 @@ echo " - python: ${PYTHON_BIN}"
 
 echo "=================================================="
 echo "[1/4] 640px inference -> submission/exp9_submission_640.csv"
-"${PYTHON_BIN}" src/test_custom_v12.py --model "$MODEL_PATH" --imgsz 640 --conf 0.20 --iou 0.60 --output submission/exp9_submission_640.csv --no-save-config
+"${PYTHON_BIN}" src/test_custom.py --model "$MODEL_PATH" --imgsz 640 --conf 0.20 --iou 0.60 --output submission/exp9_submission_640.csv --no-save-config
 
 echo "=================================================="
 echo "[2/4] 960px inference -> submission/exp9_submission_960.csv"
-"${PYTHON_BIN}" src/test_custom_v12.py --model "$MODEL_PATH" --imgsz 960 --conf 0.20 --iou 0.60 --output submission/exp9_submission_960.csv --no-save-config
+"${PYTHON_BIN}" src/test_custom.py --model "$MODEL_PATH" --imgsz 960 --conf 0.20 --iou 0.60 --output submission/exp9_submission_960.csv --no-save-config
 
 echo "=================================================="
 echo "[3/4] 1024px inference -> submission/exp9_submission_1024.csv"
-"${PYTHON_BIN}" src/test_custom_v12.py --model "$MODEL_PATH" --imgsz 1024 --conf 0.20 --iou 0.60 --output submission/exp9_submission_1024.csv --no-save-config
+"${PYTHON_BIN}" src/test_custom.py --model "$MODEL_PATH" --imgsz 1024 --conf 0.20 --iou 0.60 --output submission/exp9_submission_1024.csv --no-save-config
 
 echo "=================================================="
 echo "[4/4] WBF ensemble -> submission/exp9_final_wbf.csv"
